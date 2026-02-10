@@ -1,0 +1,159 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ListingCondition {
+  NEW
+  LIKE_NEW
+  VERY_GOOD
+  GOOD
+  FAIR
+  POOR
+}
+
+enum AlertType {
+  PRICE_BELOW
+  PRICE_ABOVE
+  NEW_LISTING
+}
+
+model Brand {
+  id        BigInt   @id @default(autoincrement())
+  name      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  models Model[]
+
+  @@map("brands")
+}
+
+model Model {
+  id        BigInt   @id @default(autoincrement())
+  brandId   BigInt   @map("brand_id")
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  brand      Brand       @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  references Reference[]
+
+  @@unique([brandId, name])
+  @@map("models")
+}
+
+model Reference {
+  id        BigInt   @id @default(autoincrement())
+  modelId   BigInt   @map("model_id")
+  code      String   @unique
+  name      String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  model        Model          @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  listings     Listing[]
+  priceHistory PriceHistory[]
+  watchlists   Watchlist[]
+
+  @@map("references")
+}
+
+model Listing {
+  id                BigInt           @id @default(autoincrement())
+  referenceId       BigInt           @map("reference_id")
+  source            String
+  marketplace       String
+  externalListingId String           @map("external_listing_id")
+  price             Decimal          @db.Decimal(18, 2)
+  currency          String           @db.VarChar(3)
+  condition         ListingCondition
+  observedAt        DateTime         @map("observed_at")
+  listingDate       DateTime?        @map("listing_date")
+  metadata          Json?
+  createdAt         DateTime         @default(now()) @map("created_at")
+
+  reference Reference @relation(fields: [referenceId], references: [id], onDelete: Cascade)
+
+  @@index([referenceId, observedAt])
+  @@unique([marketplace, externalListingId])
+  @@map("listings")
+}
+
+model PriceHistory {
+  id          BigInt   @id @default(autoincrement())
+  referenceId BigInt   @map("reference_id")
+  observedAt  DateTime @map("observed_at")
+  minPrice    Decimal? @map("min_price") @db.Decimal(18, 2)
+  maxPrice    Decimal? @map("max_price") @db.Decimal(18, 2)
+  avgPrice    Decimal? @map("avg_price") @db.Decimal(18, 2)
+  sampleSize  Int      @default(0) @map("sample_size")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  reference Reference @relation(fields: [referenceId], references: [id], onDelete: Cascade)
+
+  @@index([referenceId, observedAt])
+  @@map("price_history")
+}
+
+model User {
+  id           BigInt   @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  locale       String   @default("fr")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  watchlists Watchlist[]
+  alerts     Alert[]
+
+  @@map("users")
+}
+
+model Watchlist {
+  id          BigInt   @id @default(autoincrement())
+  userId      BigInt   @map("user_id")
+  referenceId BigInt   @map("reference_id")
+  name        String?
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reference Reference @relation(fields: [referenceId], references: [id], onDelete: Cascade)
+  alerts    Alert[]
+
+  @@unique([userId, referenceId])
+  @@map("watchlists")
+}
+
+model Alert {
+  id          BigInt    @id @default(autoincrement())
+  userId      BigInt    @map("user_id")
+  watchlistId BigInt?   @map("watchlist_id")
+  type        AlertType
+  threshold   Decimal?  @db.Decimal(18, 2)
+  isActive    Boolean   @default(true) @map("is_active")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  watchlist Watchlist? @relation(fields: [watchlistId], references: [id], onDelete: SetNull)
+
+  @@map("alerts")
+}
+
+model SourceTrustScore {
+  id          BigInt   @id @default(autoincrement())
+  source      String   @unique
+  score       Decimal  @db.Decimal(5, 2)
+  confidence  Decimal? @db.Decimal(5, 2)
+  reason      String?
+  evaluatedAt DateTime @map("evaluated_at")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("source_trust_scores")
+}
