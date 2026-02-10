@@ -1,0 +1,25 @@
+name: CI Security
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test-and-security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install .[dev]
+          pip install pip-audit semgrep
+      - name: Run tests (includes OWASP API Top 10 checks)
+        run: pytest -q
+      - name: SAST scan (Semgrep)
+        run: semgrep scan --config auto
+      - name: Dependency vulnerability scan
+        run: pip-audit
