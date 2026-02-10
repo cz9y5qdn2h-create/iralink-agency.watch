@@ -1,0 +1,130 @@
+openapi: 3.1.0
+info:
+  title: Watch Opportunities API
+  version: 0.1.0
+  description: Contrat API pour exploration de montres et opportunités.
+servers:
+  - url: http://localhost:8000
+paths:
+  /watches:
+    get:
+      summary: Liste des montres
+      operationId: listWatches
+      responses:
+        '200':
+          description: Liste des montres
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Watch'
+  /watches/{id}:
+    get:
+      summary: Détail d'une montre
+      operationId: getWatchById
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Montre trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Watch'
+        '404':
+          description: Montre non trouvée
+  /opportunities:
+    get:
+      summary: Liste des opportunités d'achat
+      operationId: listOpportunities
+      responses:
+        '200':
+          description: Opportunités d'achat
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Opportunity'
+  /alerts:
+    post:
+      summary: Création d'une alerte
+      operationId: createAlert
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertIn'
+      responses:
+        '201':
+          description: Alerte créée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertOut'
+components:
+  schemas:
+    Watch:
+      type: object
+      required: [id, brand, model, reference, market_price_eur]
+      properties:
+        id:
+          type: string
+        brand:
+          type: string
+        model:
+          type: string
+        reference:
+          type: string
+        market_price_eur:
+          type: number
+          format: float
+    Opportunity:
+      type: object
+      required: [watch_id, score, estimated_margin_eur, reason]
+      properties:
+        watch_id:
+          type: string
+        score:
+          type: number
+          minimum: 0
+          maximum: 1
+        estimated_margin_eur:
+          type: number
+          format: float
+        reason:
+          type: string
+    AlertIn:
+      type: object
+      required: [email]
+      properties:
+        email:
+          type: string
+          format: email
+        min_score:
+          type: number
+          default: 0.7
+        brand:
+          type: string
+          nullable: true
+    AlertOut:
+      type: object
+      required: [status, email, min_score]
+      properties:
+        status:
+          type: string
+          enum: [created]
+        email:
+          type: string
+          format: email
+        min_score:
+          type: number
+        brand:
+          type: string
+          nullable: true
