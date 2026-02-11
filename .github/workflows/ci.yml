@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  validate-static-site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate required files
+        run: |
+          test -f index.html
+          test -f styles.css
+
+      - name: Basic HTML sanity checks
+        run: |
+          grep -q "<title>" index.html
+          grep -q "<main>" index.html
+
+      - name: Workflow finished successfully
+        run: echo "Static checks passed, no exit code 1."
