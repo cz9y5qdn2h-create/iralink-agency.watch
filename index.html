@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Watch Intelligence Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <h1>Watch Intelligence</h1>
+        <p>Top opportunités, alertes et comparaison multi-références</p>
+      </div>
+      <button id="viewWatchlistBtn" class="ghost">Voir la watchlist (<span id="watchlistCount">0</span>)</button>
+    </header>
+
+    <main class="grid">
+      <section class="card">
+        <h2>Top opportunités</h2>
+        <div class="filters">
+          <label>
+            Marque
+            <select id="brandFilter">
+              <option value="">Toutes</option>
+            </select>
+          </label>
+          <label>
+            Référence
+            <input id="referenceFilter" type="text" placeholder="ex: 126610LN" />
+          </label>
+          <label>
+            Budget max (€)
+            <input id="budgetFilter" type="number" min="0" placeholder="25000" />
+          </label>
+        </div>
+        <div id="opportunityList" class="list"></div>
+      </section>
+
+      <section class="card">
+        <h2>Fiche montre & historique prix</h2>
+        <label>
+          Sélection montre
+          <select id="watchSelector"></select>
+        </label>
+        <article id="watchDetails" class="watch-details"></article>
+        <canvas id="priceChart" width="720" height="260" aria-label="Graphique historique de prix"></canvas>
+      </section>
+
+      <section class="card">
+        <h2>Alertes personnalisées</h2>
+        <form id="alertForm" class="alert-form">
+          <label>
+            Référence
+            <input name="reference" required placeholder="116500LN" />
+          </label>
+          <label>
+            Prix cible (€)
+            <input name="targetPrice" type="number" min="0" required />
+          </label>
+          <label>
+            Variation (%)
+            <input name="variation" type="number" step="0.1" required />
+          </label>
+          <label>
+            Disponibilité
+            <select name="availability">
+              <option value="En stock">En stock</option>
+              <option value="Sous 24h">Sous 24h</option>
+              <option value="Neuf seulement">Neuf seulement</option>
+              <option value="Complet">Complet</option>
+            </select>
+          </label>
+          <button type="submit">Créer l'alerte</button>
+        </form>
+        <div id="alertsList" class="list compact"></div>
+      </section>
+
+      <section class="card">
+        <h2>Score de confiance source</h2>
+        <div id="confidenceBoard" class="confidence-board"></div>
+      </section>
+
+      <section class="card">
+        <h2>Notifications</h2>
+        <form id="notificationForm" class="notification-form">
+          <label><input type="checkbox" name="email" checked /> Email</label>
+          <label><input type="checkbox" name="telegram" /> Telegram</label>
+          <label><input type="checkbox" name="push" checked /> Push</label>
+          <label>
+            Fréquence
+            <select name="frequency">
+              <option>Temps réel</option>
+              <option>Digest quotidien</option>
+              <option>Digest hebdomadaire</option>
+            </select>
+          </label>
+          <button type="submit">Sauvegarder</button>
+        </form>
+        <p id="notificationStatus" class="muted"></p>
+      </section>
+
+      <section class="card">
+        <h2>Comparaison 2–3 références</h2>
+        <div class="compare-selectors">
+          <select id="compareA"></select>
+          <select id="compareB"></select>
+          <select id="compareC"></select>
+          <button id="compareBtn">Comparer</button>
+        </div>
+        <div id="comparisonTable"></div>
+      </section>
+    </main>
+
+    <dialog id="watchlistDialog">
+      <h3>Favoris / Watchlist</h3>
+      <div id="watchlistEntries" class="list compact"></div>
+      <button id="closeWatchlistBtn">Fermer</button>
+    </dialog>
+
+    <script src="script.js"></script>
+  </body>
+</html>
