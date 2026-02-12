@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IRALINK — Watch Intelligence</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>IRALINK — Market Intelligence Horloger</h1>
+    <p>Top opportunités, suivi de prix, alertes, confiance source et comparaison.</p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>Top opportunités</h2>
+      <div class="filters">
+        <label>Marque
+          <select id="filter-brand"><option value="">Toutes</option></select>
+        </label>
+        <label>Référence
+          <input id="filter-reference" type="text" placeholder="ex: 126610LN" />
+        </label>
+        <label>Budget max (€)
+          <input id="filter-budget" type="number" min="0" step="100" placeholder="ex: 15000" />
+        </label>
+      </div>
+      <div id="opportunities" class="cards"></div>
+    </section>
+
+    <section class="panel two-cols">
+      <div>
+        <h2>Fiche montre</h2>
+        <label>Sélectionner une montre
+          <select id="watch-selector"></select>
+        </label>
+        <div id="watch-details" class="watch-details"></div>
+      </div>
+      <div>
+        <h3>Historique des prix</h3>
+        <canvas id="price-chart" width="500" height="260" aria-label="Graphique historique prix"></canvas>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Alertes personnalisées</h2>
+      <form id="alert-form" class="form-grid">
+        <label>Montre
+          <select id="alert-watch"></select>
+        </label>
+        <label>Prix cible (€)
+          <input id="target-price" type="number" required min="0" />
+        </label>
+        <label>Variation (%)
+          <input id="variation" type="number" required min="0" max="100" />
+        </label>
+        <label>Disponibilité
+          <select id="availability">
+            <option value="in-stock">En stock</option>
+            <option value="any">Indifférent</option>
+          </select>
+        </label>
+        <label>Canal de notification
+          <select id="notification-channel" multiple>
+            <option value="email">Email</option>
+            <option value="telegram">Telegram</option>
+            <option value="push">Push</option>
+          </select>
+        </label>
+        <button type="submit">Créer l'alerte</button>
+      </form>
+      <ul id="alerts-list"></ul>
+    </section>
+
+    <section class="panel">
+      <h2>Favoris / Watchlist</h2>
+      <ul id="watchlist"></ul>
+    </section>
+
+    <section class="panel">
+      <h2>Comparaison côte à côte (2–3 références)</h2>
+      <div class="compare-picker">
+        <label><input type="checkbox" class="compare-check" value="0"> Montre 1</label>
+        <label><input type="checkbox" class="compare-check" value="1"> Montre 2</label>
+        <label><input type="checkbox" class="compare-check" value="2"> Montre 3</label>
+        <label><input type="checkbox" class="compare-check" value="3"> Montre 4</label>
+        <label><input type="checkbox" class="compare-check" value="4"> Montre 5</label>
+      </div>
+      <div id="comparison"></div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

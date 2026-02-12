@@ -1,0 +1,98 @@
+:root {
+  color-scheme: light;
+  --bg: #f5f7fb;
+  --panel: #ffffff;
+  --text: #1f2a37;
+  --subtle: #5b6470;
+  --primary: #255ff4;
+  --ok: #149f53;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+header {
+  padding: 1.25rem 2rem;
+  background: #0d1730;
+  color: #fff;
+}
+
+main {
+  padding: 1rem 2rem 2rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.panel {
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 12px rgba(20, 35, 56, 0.08);
+}
+
+.two-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.filters, .form-grid, .compare-picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: .7rem;
+  margin-bottom: 1rem;
+}
+
+label { display: grid; gap: .35rem; font-size: .92rem; }
+
+input, select, button {
+  padding: .5rem .6rem;
+  border-radius: 8px;
+  border: 1px solid #ccd5e3;
+}
+
+button {
+  border: none;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: .8rem;
+}
+
+.card {
+  border: 1px solid #dde4f0;
+  border-radius: 10px;
+  padding: .8rem;
+}
+
+.meta { color: var(--subtle); font-size: .88rem; }
+.badge { background: #ecf8f0; color: var(--ok); border-radius: 100px; padding: .2rem .5rem; font-size: .78rem; }
+
+.watch-details {
+  display: grid;
+  gap: .35rem;
+}
+
+#comparison table {
+  border-collapse: collapse;
+  width: 100%;
+}
+#comparison th, #comparison td {
+  border: 1px solid #e0e6f0;
+  padding: .45rem;
+  text-align: left;
+}
+
+@media (max-width: 900px) {
+  .two-cols { grid-template-columns: 1fr; }
+}
