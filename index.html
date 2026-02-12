@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IL-Watch — Plateforme sécurisée d'échange de montres</title>
+    <title>IL-Watch Beta — Trading & Exchange sécurisé de montres</title>
     <meta
       name="description"
-      content="IL-Watch, plateforme premium d'échange de montres : analyses de marché, KYC sécurisé, escrow, matching transactions et gestion import-export."
+      content="Version bêta IL-Watch : suivi de marché, onboarding KYC, dépôt de transactions et espace Academy."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -18,18 +18,16 @@
   </head>
   <body>
     <div class="cursor-glow" aria-hidden="true"></div>
-
     <header class="site-header">
       <div class="container nav-wrap">
         <a class="brand" href="#home">IL-<span>Watch</span></a>
         <nav>
           <a href="#market">Marché</a>
-          <a href="#platform">Plateforme</a>
-          <a href="#security">Sécurité</a>
+          <a href="#beta">Beta Platform</a>
           <a href="#academy">Academy</a>
           <a href="#legal">Légal</a>
         </nav>
-        <a class="nav-cta" href="#security">Vérifier mon compte</a>
+        <a class="nav-cta" href="#beta">Tester la bêta</a>
       </div>
     </header>
 
@@ -37,157 +35,97 @@
       <section class="hero">
         <div class="hero-bg" aria-hidden="true"></div>
         <div class="container hero-content">
-          <p class="eyebrow reveal">IL-Watch Platform</p>
-          <h1 class="reveal">Le trading horloger, repensé comme un produit premium.</h1>
+          <p class="eyebrow reveal">IL-Watch Beta</p>
+          <h1 class="reveal">Front + Backend prêts pour votre version bêta.</h1>
           <p class="lead reveal">
-            Une plateforme ultra-design et ultra-sécurisée pour suivre les cours des montres, échanger
-            en confiance via identité vérifiée (KYC), et déléguer les opérations critiques : matching,
-            paiement sécurisé, import-export et conformité.
+            Plateforme d'échange horloger premium avec API active : suivi de cours, inscription KYC,
+            dépôt de transactions sécurisées, et contenus de formation.
           </p>
           <div class="hero-actions reveal">
-            <a class="btn btn-primary" href="#platform">Découvrir la plateforme</a>
-            <a class="btn btn-secondary" href="#academy">Voir les formations</a>
+            <a class="btn btn-primary" href="#beta">Lancer un test maintenant</a>
+            <a class="btn btn-secondary" href="#deploy">Publier la bêta</a>
           </div>
           <div class="hero-metrics reveal">
-            <article>
-              <p class="kpi" data-target="14">0</p>
-              <span>ans de données consolidées</span>
-            </article>
-            <article>
-              <p class="kpi" data-target="1200">0</p>
-              <span>références monitorées</span>
-            </article>
-            <article>
-              <p class="kpi" data-target="99">0</p>
-              <span>% transactions tracées</span>
-            </article>
+            <article><p class="kpi" data-target="4">0</p><span>modèles en base</span></article>
+            <article><p class="kpi" data-target="3">0</p><span>articles Academy</span></article>
+            <article><p class="kpi" data-target="24">0</p><span>h pour lancer en prod</span></article>
           </div>
         </div>
       </section>
 
       <section id="market" class="section container">
         <div class="section-head reveal">
-          <p class="eyebrow">Market Intelligence</p>
-          <h2>Visualisez les fluctuations comme jamais.</h2>
+          <p class="eyebrow">Market Feed (API)</p>
+          <h2>Flux des montres suivies en temps réel (beta seed).</h2>
         </div>
-        <div class="market-grid">
+        <div class="table-wrap reveal">
+          <table>
+            <thead>
+              <tr>
+                <th>Modèle</th>
+                <th>Prix actuel (€)</th>
+                <th>1 an</th>
+                <th>5 ans</th>
+                <th>Tendance</th>
+              </tr>
+            </thead>
+            <tbody id="watchesTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="beta" class="section section-dark">
+        <div class="container two-col">
           <article class="glass card reveal">
-            <h3>Courbes historiques multi-années</h3>
-            <p>
-              Comparez les cycles de valorisation, la liquidité et la saisonnalité pour comprendre les
-              tendances longues du marché horloger.
-            </p>
+            <h3>1) Inscription KYC</h3>
+            <p>Document d'identité requis pour valider l'accès à la plateforme d'échange.</p>
+            <form id="registerForm" class="stack">
+              <input name="fullName" placeholder="Nom complet" required />
+              <input name="email" type="email" placeholder="Email" required />
+              <input name="idNumber" placeholder="Numéro pièce d'identité" required />
+              <button class="btn btn-primary" type="submit">Créer mon compte sécurisé</button>
+            </form>
+            <p id="registerMessage" class="feedback"></p>
           </article>
+
           <article class="glass card reveal">
-            <h3>Volatilité en temps réel</h3>
-            <p>
-              Détection instantanée des accélérations de prix, retracements et zones de surchauffe pour
-              agir avec timing.
-            </p>
-          </article>
-          <article class="glass card reveal">
-            <h3>Radar d'opportunités</h3>
-            <p>
-              Classement intelligent des montres avec les meilleurs signaux de progression potentielle,
-              basé sur des facteurs marché + fondamentaux.
-            </p>
+            <h3>2) Dépôt transaction</h3>
+            <p>On s'occupe du matching, des flux sécurisés et du process import-export.</p>
+            <form id="transactionForm" class="stack">
+              <input name="watchModel" placeholder="Modèle de montre" required />
+              <select name="side" required>
+                <option value="">Type d'ordre</option>
+                <option value="buy">Achat</option>
+                <option value="sell">Vente</option>
+              </select>
+              <input name="amount" type="number" min="1" placeholder="Montant (€)" required />
+              <input name="country" placeholder="Pays (import/export)" required />
+              <button class="btn btn-primary" type="submit">Déposer la transaction</button>
+            </form>
+            <p id="transactionMessage" class="feedback"></p>
           </article>
         </div>
       </section>
 
-      <section id="platform" class="section section-dark">
-        <div class="container">
-          <div class="section-head reveal">
-            <p class="eyebrow">Exchange Core</p>
-            <h2>Une plateforme d'échange sécurisée, de bout en bout.</h2>
-          </div>
-          <div class="timeline">
-            <article class="step reveal">
-              <span>01</span>
-              <h3>Inscription & vérification d'identité</h3>
-              <p>
-                Chaque utilisateur valide son identité avec document officiel pour garantir un écosystème
-                fiable et limiter les fraudes.
-              </p>
-            </article>
-            <article class="step reveal">
-              <span>02</span>
-              <h3>Matching des transactions</h3>
-              <p>
-                Nous orchestrons la correspondance acheteur-vendeur avec workflow auditable et suivi de
-                chaque étape de transaction.
-              </p>
-            </article>
-            <article class="step reveal">
-              <span>03</span>
-              <h3>Escrow & conformité des paiements</h3>
-              <p>
-                Les flux financiers passent par des procédures de sécurisation dédiées avant libération
-                finale, pour protéger les deux parties.
-              </p>
-            </article>
-            <article class="step reveal">
-              <span>04</span>
-              <h3>Gestion import-export</h3>
-              <p>
-                Assistance opérationnelle sur la logistique, la traçabilité et la conformité documentaire
-                des échanges internationaux.
-              </p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section id="security" class="section container">
+      <section id="academy" class="section container">
         <div class="section-head reveal">
-          <p class="eyebrow">Trust & Safety</p>
-          <h2>Architecture sécurité pensée pour les échanges premium.</h2>
+          <p class="eyebrow">Academy Feed</p>
+          <h2>Blogs pour apprendre à détecter les montres qui prennent de la valeur.</h2>
         </div>
-        <div class="security-panels">
-          <article class="glass reveal">
-            <h3>KYC renforcé</h3>
-            <p>
-              Vérification d'identité à l'entrée de la plateforme, contrôles de cohérence et procédures
-              anti-usurpation pour authentifier les utilisateurs.
-            </p>
-          </article>
-          <article class="glass reveal">
-            <h3>Traçabilité complète</h3>
-            <p>
-              Historique des actions, preuves de transaction et journalisation des étapes pour une
-              transparence maximale.
-            </p>
-          </article>
-          <article class="glass reveal">
-            <h3>Processus anti-risque</h3>
-            <p>
-              Protocoles de vérification avant expédition/réception et processus de contrôle renforcé
-              sur les échanges à forte valeur.
-            </p>
-          </article>
-        </div>
+        <div id="postsGrid" class="market-grid"></div>
       </section>
 
-      <section id="academy" class="section section-dark">
-        <div class="container">
-          <div class="section-head reveal">
-            <p class="eyebrow">IL-Watch Academy</p>
-            <h2>Formations & blogs pour identifier les montres qui prennent de la valeur.</h2>
-          </div>
-          <div class="market-grid">
-            <article class="glass card reveal">
-              <h3>Lecture avancée du marché</h3>
-              <p>Comprendre momentum, rareté, liquidité et signaux de valorisation durable.</p>
-            </article>
-            <article class="glass card reveal">
-              <h3>Cas réels décryptés</h3>
-              <p>Analyses détaillées de transactions performantes et des erreurs à éviter.</p>
-            </article>
-            <article class="glass card reveal">
-              <h3>Discipline & gestion du risque</h3>
-              <p>Construire une stratégie cohérente au lieu de décider sous pression émotionnelle.</p>
-            </article>
-          </div>
+      <section id="deploy" class="section section-dark">
+        <div class="container reveal">
+          <p class="eyebrow">Go live</p>
+          <h2>Manip pour publier la bêta</h2>
+          <ol class="deploy-list">
+            <li>Installer Node.js 18+ sur le serveur.</li>
+            <li>Copier le repo puis lancer <code>node server.js</code>.</li>
+            <li>Mettre un reverse-proxy Nginx sur le port 3000.</li>
+            <li>Activer HTTPS (Let's Encrypt) avant ouverture publique.</li>
+            <li>Passer la base JSON vers PostgreSQL pour la prod.</li>
+          </ol>
         </div>
       </section>
 
@@ -196,15 +134,13 @@
           <p class="eyebrow">Mentions légales</p>
           <h2>Politique de confidentialité & limitation de responsabilité</h2>
           <p>
-            IL-Watch fournit des données, indicateurs, contenus pédagogiques et services de facilitation
-            à titre informatif et opérationnel. Les contenus ne constituent pas un conseil financier
-            personnalisé ni une promesse de performance.
+            IL-Watch met à disposition des données de marché, outils d'aide et workflows transactionnels.
+            Ces informations ne constituent pas un conseil financier personnalisé.
           </p>
           <p>
-            Chaque utilisateur demeure seul responsable de ses décisions d'achat, de vente, de
-            conservation et de toute opération liée aux montres. Dans les limites permises par la loi,
-            IL-Watch, ses équipes et partenaires ne sauraient être tenus responsables des pertes,
-            dommages ou manques à gagner, directs ou indirects, liés à l'usage de la plateforme.
+            L'utilisateur reste seul responsable de ses décisions. Dans les limites légales applicables,
+            IL-Watch ne peut être tenu responsable des pertes directes ou indirectes liées à l'usage de
+            la plateforme.
           </p>
         </div>
       </section>
@@ -212,8 +148,8 @@
 
     <footer class="site-footer">
       <div class="container footer-wrap">
-        <p>© 2026 IL-Watch — Premium Watch Exchange</p>
-        <a href="#legal">Conditions & confidentialité</a>
+        <p>© 2026 IL-Watch Beta</p>
+        <a href="#legal">Confidentialité</a>
       </div>
     </footer>
 

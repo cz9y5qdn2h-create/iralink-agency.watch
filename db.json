@@ -1,0 +1,71 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "fullName": "Jean Test",
+      "email": "jean@test.com",
+      "idNumberMasked": "****3456",
+      "status": "pending_review",
+      "createdAt": "2026-02-12T18:04:25.368Z"
+    }
+  ],
+  "watches": [
+    {
+      "id": 1,
+      "model": "Rolex Submariner 116610LN",
+      "brand": "Rolex",
+      "currentPrice": 11200,
+      "change1Y": 8.1,
+      "change5Y": 34.4,
+      "trend": "up"
+    },
+    {
+      "id": 2,
+      "model": "Audemars Piguet Royal Oak 15500ST",
+      "brand": "AP",
+      "currentPrice": 39200,
+      "change1Y": -2.3,
+      "change5Y": 27.8,
+      "trend": "flat"
+    },
+    {
+      "id": 3,
+      "model": "Patek Philippe Nautilus 5711",
+      "brand": "Patek Philippe",
+      "currentPrice": 145000,
+      "change1Y": 5.7,
+      "change5Y": 83.6,
+      "trend": "up"
+    },
+    {
+      "id": 4,
+      "model": "Omega Speedmaster Moonwatch",
+      "brand": "Omega",
+      "currentPrice": 6200,
+      "change1Y": 3.2,
+      "change5Y": 21.5,
+      "trend": "up"
+    }
+  ],
+  "posts": [
+    {
+      "id": 1,
+      "title": "Comment repérer une montre à fort potentiel ?",
+      "category": "Analyse",
+      "excerpt": "Rareté, storytelling, historique des prix et profondeur de marché."
+    },
+    {
+      "id": 2,
+      "title": "Éviter les faux signaux de valorisation",
+      "category": "Risque",
+      "excerpt": "Ne pas confondre buzz court terme et tendance structurelle."
+    },
+    {
+      "id": 3,
+      "title": "Construire une stratégie long terme",
+      "category": "Méthodologie",
+      "excerpt": "Discipline, diversification et gestion émotionnelle."
+    }
+  ],
+  "transactions": []
+}
