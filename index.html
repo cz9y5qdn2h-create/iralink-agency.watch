@@ -3,129 +3,208 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IL-Watch | Suivi du marché des montres</title>
+    <title>IL-Watch — Plateforme sécurisée d'échange de montres</title>
     <meta
       name="description"
-      content="IL-Watch est une plateforme dédiée au trading de montres : suivi des cours historiques, fluctuations du marché et formation via des blogs experts."
+      content="IL-Watch, plateforme premium d'échange de montres : analyses de marché, KYC sécurisé, escrow, matching transactions et gestion import-export."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <div class="cursor-glow" aria-hidden="true"></div>
+
     <header class="site-header">
       <div class="container nav-wrap">
-        <a href="#" class="brand">IL-<span>Watch</span></a>
+        <a class="brand" href="#home">IL-<span>Watch</span></a>
         <nav>
           <a href="#market">Marché</a>
-          <a href="#formation">Formation</a>
-          <a href="#blog">Blogs</a>
-          <a href="#legal">Mentions légales</a>
+          <a href="#platform">Plateforme</a>
+          <a href="#security">Sécurité</a>
+          <a href="#academy">Academy</a>
+          <a href="#legal">Légal</a>
         </nav>
+        <a class="nav-cta" href="#security">Vérifier mon compte</a>
       </div>
     </header>
 
-    <main>
+    <main id="home">
       <section class="hero">
-        <div class="container hero-grid">
-          <div>
-            <p class="tag">Projet IL-Watch</p>
-            <h1>Le site dédié au trading de montres de collection</h1>
-            <p class="lead">
-              Analysez le cours des montres sur plusieurs années, suivez les fluctuations du marché en
-              temps réel, et apprenez à identifier les modèles qui prennent de la valeur.
-            </p>
-            <div class="hero-actions">
-              <a class="btn btn-primary" href="#market">Suivre les cours</a>
-              <a class="btn btn-ghost" href="#formation">Commencer la formation</a>
-            </div>
+        <div class="hero-bg" aria-hidden="true"></div>
+        <div class="container hero-content">
+          <p class="eyebrow reveal">IL-Watch Platform</p>
+          <h1 class="reveal">Le trading horloger, repensé comme un produit premium.</h1>
+          <p class="lead reveal">
+            Une plateforme ultra-design et ultra-sécurisée pour suivre les cours des montres, échanger
+            en confiance via identité vérifiée (KYC), et déléguer les opérations critiques : matching,
+            paiement sécurisé, import-export et conformité.
+          </p>
+          <div class="hero-actions reveal">
+            <a class="btn btn-primary" href="#platform">Découvrir la plateforme</a>
+            <a class="btn btn-secondary" href="#academy">Voir les formations</a>
           </div>
-          <div class="stat-card">
-            <h2>Vue Marché IL-Watch</h2>
-            <ul>
-              <li><strong>+14 ans</strong> de données historiques consolidées</li>
-              <li><strong>1 200+</strong> références de montres suivies</li>
-              <li><strong>Alertes</strong> sur variations de prix et liquidité</li>
-            </ul>
+          <div class="hero-metrics reveal">
+            <article>
+              <p class="kpi" data-target="14">0</p>
+              <span>ans de données consolidées</span>
+            </article>
+            <article>
+              <p class="kpi" data-target="1200">0</p>
+              <span>références monitorées</span>
+            </article>
+            <article>
+              <p class="kpi" data-target="99">0</p>
+              <span>% transactions tracées</span>
+            </article>
           </div>
         </div>
       </section>
 
       <section id="market" class="section container">
-        <h2>Suivez le cours des montres et leurs fluctuations</h2>
-        <p>
-          IL-Watch centralise les tendances du marché horloger pour comparer les performances des
-          modèles emblématiques sur le court, moyen et long terme.
-        </p>
-        <div class="cards">
-          <article class="card">
-            <h3>Historique long terme</h3>
-            <p>Consultez les performances annuelles et les cycles du marché depuis des années.</p>
+        <div class="section-head reveal">
+          <p class="eyebrow">Market Intelligence</p>
+          <h2>Visualisez les fluctuations comme jamais.</h2>
+        </div>
+        <div class="market-grid">
+          <article class="glass card reveal">
+            <h3>Courbes historiques multi-années</h3>
+            <p>
+              Comparez les cycles de valorisation, la liquidité et la saisonnalité pour comprendre les
+              tendances longues du marché horloger.
+            </p>
           </article>
-          <article class="card">
-            <h3>Signaux de volatilité</h3>
-            <p>Repérez les hausses ou corrections avec des indicateurs lisibles et contextualisés.</p>
+          <article class="glass card reveal">
+            <h3>Volatilité en temps réel</h3>
+            <p>
+              Détection instantanée des accélérations de prix, retracements et zones de surchauffe pour
+              agir avec timing.
+            </p>
           </article>
-          <article class="card">
-            <h3>Comparaison multi-références</h3>
-            <p>Comparez plusieurs montres pour identifier les opportunités d'entrée et de sortie.</p>
+          <article class="glass card reveal">
+            <h3>Radar d'opportunités</h3>
+            <p>
+              Classement intelligent des montres avec les meilleurs signaux de progression potentielle,
+              basé sur des facteurs marché + fondamentaux.
+            </p>
           </article>
         </div>
       </section>
 
-      <section id="formation" class="section alt">
+      <section id="platform" class="section section-dark">
         <div class="container">
-          <h2>Plateforme de formation via les blogs</h2>
-          <p>
-            Nos contenus pédagogiques vous guident pas à pas pour comprendre les facteurs qui
-            influencent la valeur d'une montre et construire une approche disciplinée.
-          </p>
-          <div class="cards">
-            <article class="card">
-              <h3>Méthodologie d'analyse</h3>
-              <p>Apprenez à lire les tendances de prix, la rareté et la profondeur de marché.</p>
+          <div class="section-head reveal">
+            <p class="eyebrow">Exchange Core</p>
+            <h2>Une plateforme d'échange sécurisée, de bout en bout.</h2>
+          </div>
+          <div class="timeline">
+            <article class="step reveal">
+              <span>01</span>
+              <h3>Inscription & vérification d'identité</h3>
+              <p>
+                Chaque utilisateur valide son identité avec document officiel pour garantir un écosystème
+                fiable et limiter les fraudes.
+              </p>
             </article>
-            <article class="card">
-              <h3>Études de cas</h3>
-              <p>Découvrez des exemples concrets de montres qui ont pris de la valeur dans le temps.</p>
+            <article class="step reveal">
+              <span>02</span>
+              <h3>Matching des transactions</h3>
+              <p>
+                Nous orchestrons la correspondance acheteur-vendeur avec workflow auditable et suivi de
+                chaque étape de transaction.
+              </p>
             </article>
-            <article class="card">
-              <h3>Gestion du risque</h3>
-              <p>Adoptez de bonnes pratiques de diversification et de décision raisonnée.</p>
+            <article class="step reveal">
+              <span>03</span>
+              <h3>Escrow & conformité des paiements</h3>
+              <p>
+                Les flux financiers passent par des procédures de sécurisation dédiées avant libération
+                finale, pour protéger les deux parties.
+              </p>
+            </article>
+            <article class="step reveal">
+              <span>04</span>
+              <h3>Gestion import-export</h3>
+              <p>
+                Assistance opérationnelle sur la logistique, la traçabilité et la conformité documentaire
+                des échanges internationaux.
+              </p>
             </article>
           </div>
         </div>
       </section>
 
-      <section id="blog" class="section container">
-        <h2>Blogs & ressources IL-Watch</h2>
-        <p>
-          Retrouvez régulièrement des articles pour mieux détecter les signaux de valorisation,
-          éviter les biais d'achat impulsif, et structurer votre stratégie.
-        </p>
+      <section id="security" class="section container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Trust & Safety</p>
+          <h2>Architecture sécurité pensée pour les échanges premium.</h2>
+        </div>
+        <div class="security-panels">
+          <article class="glass reveal">
+            <h3>KYC renforcé</h3>
+            <p>
+              Vérification d'identité à l'entrée de la plateforme, contrôles de cohérence et procédures
+              anti-usurpation pour authentifier les utilisateurs.
+            </p>
+          </article>
+          <article class="glass reveal">
+            <h3>Traçabilité complète</h3>
+            <p>
+              Historique des actions, preuves de transaction et journalisation des étapes pour une
+              transparence maximale.
+            </p>
+          </article>
+          <article class="glass reveal">
+            <h3>Processus anti-risque</h3>
+            <p>
+              Protocoles de vérification avant expédition/réception et processus de contrôle renforcé
+              sur les échanges à forte valeur.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section id="academy" class="section section-dark">
+        <div class="container">
+          <div class="section-head reveal">
+            <p class="eyebrow">IL-Watch Academy</p>
+            <h2>Formations & blogs pour identifier les montres qui prennent de la valeur.</h2>
+          </div>
+          <div class="market-grid">
+            <article class="glass card reveal">
+              <h3>Lecture avancée du marché</h3>
+              <p>Comprendre momentum, rareté, liquidité et signaux de valorisation durable.</p>
+            </article>
+            <article class="glass card reveal">
+              <h3>Cas réels décryptés</h3>
+              <p>Analyses détaillées de transactions performantes et des erreurs à éviter.</p>
+            </article>
+            <article class="glass card reveal">
+              <h3>Discipline & gestion du risque</h3>
+              <p>Construire une stratégie cohérente au lieu de décider sous pression émotionnelle.</p>
+            </article>
+          </div>
+        </div>
       </section>
 
       <section id="legal" class="section legal">
-        <div class="container">
-          <h2>Politique de confidentialité et limitation de responsabilité</h2>
+        <div class="container reveal">
+          <p class="eyebrow">Mentions légales</p>
+          <h2>Politique de confidentialité & limitation de responsabilité</h2>
           <p>
-            IL-Watch met à disposition des données, des analyses et des contenus éducatifs à titre
-            informatif uniquement. Les informations présentées sur l'application web ne constituent
-            ni un conseil financier, ni une incitation à l'achat ou à la vente.
+            IL-Watch fournit des données, indicateurs, contenus pédagogiques et services de facilitation
+            à titre informatif et opérationnel. Les contenus ne constituent pas un conseil financier
+            personnalisé ni une promesse de performance.
           </p>
           <p>
-            Chaque utilisateur reste seul responsable de ses décisions d'investissement et de ses
-            opérations. Dans les limites autorisées par la loi applicable, IL-Watch, ses éditeurs et
-            ses partenaires ne pourront être tenus responsables des pertes financières, directes ou
-            indirectes, liées à l'utilisation de la plateforme, de ses données, ou de ses contenus.
-          </p>
-          <p>
-            En utilisant ce site, vous reconnaissez comprendre les risques associés au marché et
-            acceptez ces conditions de responsabilité.
+            Chaque utilisateur demeure seul responsable de ses décisions d'achat, de vente, de
+            conservation et de toute opération liée aux montres. Dans les limites permises par la loi,
+            IL-Watch, ses équipes et partenaires ne sauraient être tenus responsables des pertes,
+            dommages ou manques à gagner, directs ou indirects, liés à l'usage de la plateforme.
           </p>
         </div>
       </section>
@@ -133,9 +212,11 @@
 
     <footer class="site-footer">
       <div class="container footer-wrap">
-        <p>© 2026 IL-Watch. Tous droits réservés.</p>
-        <a href="#legal">Mentions légales</a>
+        <p>© 2026 IL-Watch — Premium Watch Exchange</p>
+        <a href="#legal">Conditions & confidentialité</a>
       </div>
     </footer>
+
+    <script src="script.js"></script>
   </body>
 </html>
