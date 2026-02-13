@@ -1,15 +1,24 @@
 # IL-Watch — Version production Hostinger (Vite + React + Express)
 
-Cette version est pensée pour être **opérationnelle en production** avec une base moderne, maintenable et orientée conversion/SEO.
+Cette version est pensée pour être **opérationnelle en production** sur Hostinger.
 
 ## Stack technique
 
 - **Front-end** : Vite + React + React Router
 - **SEO** : meta dynamiques par page (Helmet), Open Graph, Twitter Cards, JSON-LD, `robots.txt`, `sitemap.xml`
 - **API** : Express + Helmet + Compression
-- **Données MVP** : `db.json`
+- **Données MVP** : `db.json` avec fallback mémoire si écriture disque indisponible
 
 ## Démarrage local
+
+```bash
+npm install
+npm run start
+```
+
+Puis ouvre `http://localhost:3000`.
+
+## Développement
 
 ```bash
 npm install
@@ -20,14 +29,16 @@ npm run dev
 - Front : `http://localhost:5173`
 - API : `http://localhost:3000/api/health`
 
-## Build production
+## Production (Hostinger)
 
-```bash
-npm run build
-npm run server
-```
+Scripts prêts :
 
-Le serveur Express sert automatiquement le dossier `dist/`.
+- `npm start` : démarre l’app en prod (`node server.js`)
+- `postinstall` : build auto du front (`npm run build`) pour garantir que `dist/` existe
+
+Donc en déploiement Node :
+1. Commande d’installation : `npm install`
+2. Commande de démarrage : `npm start`
 
 ## SEO inclus
 
@@ -41,6 +52,6 @@ Le serveur Express sert automatiquement le dossier `dist/`.
 
 - `/` : accueil + tendances marché
 - `/compte` : onboarding & résumé compte
-- `/patrimoine` : portefeuille & ajout de montres
+- `/patrimoine` : portefeuille + ajout de montres
 - `/formations` : academy gratuite
-- `/marketplace` : catalogue, recherche et publication d'annonces
+- `/marketplace` : catalogue, recherche et publication d’annonces

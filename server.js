@@ -18,8 +18,25 @@ app.use(compression());
 app.use(cors());
 app.use(express.json({ limit: '1mb' }));
 
-const readDb = () => JSON.parse(fs.readFileSync(dbPath, 'utf8'));
-const writeDb = data => fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
+let dbCache = JSON.parse(fs.readFileSync(dbPath, 'utf8'));
+let dbPersistenceWarningShown = false;
+
+const readDb = () => dbCache;
+
+const writeDb = data => {
+  dbCache = data;
+  try {
+    fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
+    return { persisted: true };
+  } catch (error) {
+    if (!dbPersistenceWarningShown) {
+      dbPersistenceWarningShown = true;
+      console.warn('[db] Écriture disque impossible, fallback mémoire activé:', error.message);
+    }
+    return { persisted: false, reason: error.message };
+  }
+};
+
 const nextId = list => (Array.isArray(list) && list.length ? Math.max(...list.map(item => Number(item.id) || 0)) + 1 : 1);
 
 const findWatch = (db, model) => db.watches.find(item => item.model.toLowerCase() === String(model).toLowerCase());
@@ -41,7 +58,13 @@ const buildPortfolioRows = (db, userId) => db.portfolio
     };
   });
 
-app.get('/api/health', (_, res) => res.json({ ok: true, service: 'IL-Watch API (Express)', uptime: process.uptime() }));
+app.get('/api/health', (_, res) => res.json({
+  ok: true,
+  service: 'IL-Watch API (Express)',
+  uptime: process.uptime(),
+  hasBuiltFrontend: fs.existsSync(distPath)
+}));
+
 app.get('/api/watches', (_, res) => res.json(readDb().watches));
 app.get('/api/posts', (_, res) => res.json(readDb().posts));
 app.get('/api/news', (_, res) => res.json(readDb().news || []));
@@ -92,8 +115,12 @@ app.post('/api/register', (req, res) => {
   };
 
   db.users.push(newUser);
-  writeDb(db);
-  return res.status(201).json({ message: 'Compte créé, KYC en cours de validation.', user: newUser });
+  const persistence = writeDb(db);
+  return res.status(201).json({
+    message: 'Compte créé, KYC en cours de validation.',
+    user: newUser,
+    persisted: persistence.persisted
+  });
 });
 
 app.post('/api/portfolio', (req, res) => {
@@ -111,8 +138,12 @@ app.post('/api/portfolio', (req, res) => {
   };
 
   db.portfolio.push(item);
-  writeDb(db);
-  return res.status(201).json({ message: 'Montre ajoutée au patrimoine.', item });
+  const persistence = writeDb(db);
+  return res.status(201).json({
+    message: 'Montre ajoutée au patrimoine.',
+    item,
+    persisted: persistence.persisted
+  });
 });
 
 app.post('/api/listings', (req, res) => {
@@ -131,8 +162,12 @@ app.post('/api/listings', (req, res) => {
   };
 
   db.listings.push(listing);
-  writeDb(db);
-  return res.status(201).json({ message: 'Annonce publiée avec succès.', listing });
+  const persistence = writeDb(db);
+  return res.status(201).json({
+    message: 'Annonce publiée avec succès.',
+    listing,
+    persisted: persistence.persisted
+  });
 });
 
 app.post('/api/ai-assistant', (req, res) => {
@@ -150,6 +185,10 @@ app.post('/api/ai-assistant', (req, res) => {
 if (fs.existsSync(distPath)) {
   app.use(express.static(distPath, { maxAge: '1d', index: false }));
   app.get('*', (_, res) => res.sendFile(path.join(distPath, 'index.html')));
+} else {
+  app.get('/', (_, res) => {
+    res.status(503).send('Frontend non buildé. Exécutez `npm run build` puis redémarrez le serveur.');
+  });
 }
 
 app.use((err, _req, res, _next) => {
