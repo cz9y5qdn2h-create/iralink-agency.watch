@@ -8,25 +8,6 @@ const PUBLIC_DIR = __dirname;
 const DB_PATH = path.join(__dirname, 'db.json');
 
 function readDb() {
-  if (!fs.existsSync(DB_PATH)) {
-    const seed = {
-      users: [],
-      watches: [
-        { id: 1, model: 'Rolex Submariner 116610LN', brand: 'Rolex', currentPrice: 11200, change1Y: 8.1, change5Y: 34.4, trend: 'up' },
-        { id: 2, model: 'Audemars Piguet Royal Oak 15500ST', brand: 'AP', currentPrice: 39200, change1Y: -2.3, change5Y: 27.8, trend: 'flat' },
-        { id: 3, model: 'Patek Philippe Nautilus 5711', brand: 'Patek Philippe', currentPrice: 145000, change1Y: 5.7, change5Y: 83.6, trend: 'up' },
-        { id: 4, model: 'Omega Speedmaster Moonwatch', brand: 'Omega', currentPrice: 6200, change1Y: 3.2, change5Y: 21.5, trend: 'up' }
-      ],
-      posts: [
-        { id: 1, title: 'Comment repérer une montre à fort potentiel ?', category: 'Analyse', excerpt: 'Rareté, storytelling, historique des prix et profondeur de marché.' },
-        { id: 2, title: 'Éviter les faux signaux de valorisation', category: 'Risque', excerpt: 'Ne pas confondre buzz court terme et tendance structurelle.' },
-        { id: 3, title: 'Construire une stratégie long terme', category: 'Méthodologie', excerpt: 'Discipline, diversification et gestion émotionnelle.' }
-      ],
-      transactions: []
-    };
-    fs.writeFileSync(DB_PATH, JSON.stringify(seed, null, 2));
-  }
-
   return JSON.parse(fs.readFileSync(DB_PATH, 'utf8'));
 }
 
@@ -60,6 +41,28 @@ function parseBody(req) {
   });
 }
 
+function findWatch(db, model) {
+  return db.watches.find(item => item.model.toLowerCase() === String(model).toLowerCase());
+}
+
+function buildPortfolioRows(db, userId) {
+  const entries = db.portfolio.filter(item => Number(item.userId) === Number(userId));
+
+  return entries.map(entry => {
+    const watch = findWatch(db, entry.model) || { currentPrice: 0, change1Y: 0 };
+    const unitPrice = Number(watch.currentPrice);
+    const quantity = Number(entry.quantity);
+    return {
+      id: entry.id,
+      model: entry.model,
+      quantity,
+      unitPrice,
+      totalValue: unitPrice * quantity,
+      change1Y: watch.change1Y
+    };
+  });
+}
+
 function routeApi(req, res, url) {
   const db = readDb();
 
@@ -67,12 +70,15 @@ function routeApi(req, res, url) {
     return sendJson(res, 200, { ok: true, service: 'IL-Watch Beta API' });
   }
 
-  if (req.method === 'GET' && url.pathname === '/api/watches') {
-    return sendJson(res, 200, db.watches);
-  }
+  if (req.method === 'GET' && url.pathname === '/api/watches') return sendJson(res, 200, db.watches);
+  if (req.method === 'GET' && url.pathname === '/api/posts') return sendJson(res, 200, db.posts);
+  if (req.method === 'GET' && url.pathname === '/api/news') return sendJson(res, 200, db.news || []);
+  if (req.method === 'GET' && url.pathname === '/api/formations') return sendJson(res, 200, db.formations || []);
+  if (req.method === 'GET' && url.pathname === '/api/listings') return sendJson(res, 200, db.listings || []);
 
-  if (req.method === 'GET' && url.pathname === '/api/posts') {
-    return sendJson(res, 200, db.posts);
+  if (req.method === 'GET' && url.pathname === '/api/portfolio') {
+    const userId = Number(url.searchParams.get('userId') || 1);
+    return sendJson(res, 200, buildPortfolioRows(db, userId));
   }
 
   if (req.method === 'POST' && url.pathname === '/api/register') {
@@ -94,32 +100,68 @@ function routeApi(req, res, url) {
 
         db.users.push(newUser);
         writeDb(db);
-        return sendJson(res, 201, { message: 'Inscription reçue, vérification KYC en cours.', user: newUser });
+        return sendJson(res, 201, { message: 'Compte créé, KYC en cours de validation.', user: newUser });
       })
       .catch(err => sendJson(res, 400, { error: err.message }));
   }
 
-  if (req.method === 'POST' && url.pathname === '/api/transactions') {
+  if (req.method === 'POST' && url.pathname === '/api/portfolio') {
     return parseBody(req)
       .then(body => {
-        const { watchModel, side, amount, country } = body;
-        if (!watchModel || !side || !amount || !country) {
-          return sendJson(res, 400, { error: 'watchModel, side, amount et country sont requis.' });
+        const { userId, model, quantity } = body;
+        if (!userId || !model || !quantity) {
+          return sendJson(res, 400, { error: 'userId, model et quantity sont requis.' });
         }
 
-        const tx = {
-          id: db.transactions.length + 1,
-          watchModel,
-          side,
-          amount: Number(amount),
-          country,
-          status: 'matching_in_progress',
-          createdAt: new Date().toISOString()
+        const item = {
+          id: db.portfolio.length + 1,
+          userId: Number(userId),
+          model,
+          quantity: Number(quantity)
         };
 
-        db.transactions.push(tx);
+        db.portfolio.push(item);
         writeDb(db);
-        return sendJson(res, 201, { message: 'Transaction enregistrée. Matching en cours.', transaction: tx });
+        return sendJson(res, 201, { message: 'Montre ajoutée au patrimoine.', item });
+      })
+      .catch(err => sendJson(res, 400, { error: err.message }));
+  }
+
+  if (req.method === 'POST' && url.pathname === '/api/listings') {
+    return parseBody(req)
+      .then(body => {
+        const { model, price, condition, seller } = body;
+        if (!model || !price || !condition || !seller) {
+          return sendJson(res, 400, { error: 'model, price, condition et seller sont requis.' });
+        }
+
+        const listing = {
+          id: db.listings.length + 1,
+          model,
+          price: Number(price),
+          condition,
+          seller
+        };
+
+        db.listings.push(listing);
+        writeDb(db);
+        return sendJson(res, 201, { message: 'Annonce publiée avec succès.', listing });
+      })
+      .catch(err => sendJson(res, 400, { error: err.message }));
+  }
+
+  if (req.method === 'POST' && url.pathname === '/api/ai-assistant') {
+    return parseBody(req)
+      .then(body => {
+        const text = String(body.message || '').toLowerCase();
+        if (!text) return sendJson(res, 400, { error: 'message requis.' });
+
+        let answer = 'Analyse standard: comparez prix marché, liquidité et spread avant de décider.';
+        if (text.includes('vendre')) answer = 'Pour vendre: vérifiez d’abord la tendance 1 an, puis placez votre annonce proche du prix médian marketplace.';
+        if (text.includes('acheter')) answer = 'Pour acheter: priorisez les références liquides, vérifiez l’état complet et utilisez un plafond de prix discipliné.';
+        if (text.includes('échange')) answer = 'Pour un échange: comparez la valeur des deux pièces + historique de service + frais import/export.';
+
+        return sendJson(res, 200, { answer });
       })
       .catch(err => sendJson(res, 400, { error: err.message }));
   }
@@ -148,7 +190,7 @@ const server = http.createServer((req, res) => {
     return routeApi(req, res, url);
   }
 
-  let filePath = path.join(PUBLIC_DIR, url.pathname === '/' ? 'index.html' : url.pathname);
+  const filePath = path.join(PUBLIC_DIR, url.pathname === '/' ? 'index.html' : url.pathname);
   if (!filePath.startsWith(PUBLIC_DIR)) {
     res.writeHead(403);
     return res.end('Forbidden');

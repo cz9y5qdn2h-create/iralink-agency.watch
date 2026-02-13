@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mon Compte — IL-Watch</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a class="brand" href="/">IL-<span>Watch</span></a>
+        <nav>
+          <a href="/compte.html">Compte</a>
+          <a href="/patrimoine.html">Patrimoine</a>
+          <a href="/formations.html">Formations</a>
+          <a href="/marketplace.html">Marketplace</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="section container page-top">
+      <div class="section-head">
+        <p class="eyebrow">Mon compte</p>
+        <h2>Espace utilisateur, KYC & news live</h2>
+      </div>
+
+      <div class="two-col">
+        <article class="glass card">
+          <h3>Créer / mettre à jour mon compte</h3>
+          <form id="registerForm" class="stack">
+            <input name="fullName" placeholder="Nom complet" required />
+            <input name="email" type="email" placeholder="Email" required />
+            <input name="idNumber" placeholder="Numéro pièce d'identité" required />
+            <button class="btn btn-primary" type="submit">Sauvegarder mon compte</button>
+          </form>
+          <p id="registerMessage" class="feedback"></p>
+          <div id="accountInfo" class="subtle-box"></div>
+        </article>
+
+        <article class="glass card">
+          <h3>Dernières news horlogères</h3>
+          <div id="newsWidget" class="stack"></div>
+        </article>
+      </div>
+
+      <section class="section-mini">
+        <article class="glass card">
+          <h3>Agent IA d'accompagnement</h3>
+          <p class="lead">Posez vos questions pour vos achats, ventes et échanges.</p>
+          <form id="aiForm" class="stack ai-row">
+            <input name="message" placeholder="Ex: Est-ce le bon moment pour vendre ma Royal Oak ?" required />
+            <button class="btn btn-primary" type="submit">Demander à l'IA</button>
+          </form>
+          <p id="aiMessage" class="feedback"></p>
+        </article>
+      </section>
+    </main>
+
+    <script src="compte.js"></script>
+  </body>
+</html>

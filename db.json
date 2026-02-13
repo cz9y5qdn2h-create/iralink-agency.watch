@@ -5,7 +5,7 @@
       "fullName": "Jean Test",
       "email": "jean@test.com",
       "idNumberMasked": "****3456",
-      "status": "pending_review",
+      "status": "verified",
       "createdAt": "2026-02-12T18:04:25.368Z"
     }
   ],
@@ -65,6 +65,88 @@
       "title": "Construire une stratégie long terme",
       "category": "Méthodologie",
       "excerpt": "Discipline, diversification et gestion émotionnelle."
+    }
+  ],
+  "news": [
+    {
+      "id": 1,
+      "title": "Rolex annonce une hausse de demande sur les sport models",
+      "source": "WatchWire"
+    },
+    {
+      "id": 2,
+      "title": "Le marché secondaire AP se stabilise au T1",
+      "source": "ChronoTimes"
+    },
+    {
+      "id": 3,
+      "title": "Import/export: nouvelles simplifications douanières UE",
+      "source": "LuxuryTrade News"
+    }
+  ],
+  "formations": [
+    {
+      "id": 1,
+      "level": "Débutant",
+      "title": "Comprendre la valeur d'une montre de luxe",
+      "summary": "Les bases pour estimer une montre : marque, référence, état, rareté.",
+      "tags": [
+        "Fondamentaux",
+        "Valorisation",
+        "Débutant"
+      ]
+    },
+    {
+      "id": 2,
+      "level": "Intermédiaire",
+      "title": "Lire les fluctuations du marché",
+      "summary": "Interpréter les cycles et éviter les décisions impulsives.",
+      "tags": [
+        "Marché",
+        "Volatilité",
+        "Timing"
+      ]
+    },
+    {
+      "id": 3,
+      "level": "Avancé",
+      "title": "Stratégies d'achat/vente et arbitrage",
+      "summary": "Mettre en place une stratégie d'échange robuste sur la durée.",
+      "tags": [
+        "Stratégie",
+        "Arbitrage",
+        "Risque"
+      ]
+    }
+  ],
+  "portfolio": [
+    {
+      "id": 1,
+      "userId": 1,
+      "model": "Rolex Submariner 116610LN",
+      "quantity": 1
+    },
+    {
+      "id": 2,
+      "userId": 1,
+      "model": "Omega Speedmaster Moonwatch",
+      "quantity": 2
+    }
+  ],
+  "listings": [
+    {
+      "id": 1,
+      "model": "Patek Philippe Nautilus 5711",
+      "price": 152000,
+      "condition": "Très bon état",
+      "seller": "Maison Lemaire"
+    },
+    {
+      "id": 2,
+      "model": "Audemars Piguet Royal Oak 15500ST",
+      "price": 40500,
+      "condition": "Neuf",
+      "seller": "CollectorParis"
     }
   ],
   "transactions": []

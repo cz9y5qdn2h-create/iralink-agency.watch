@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IL-Watch Beta — Trading & Exchange sécurisé de montres</title>
+    <title>IL-Watch Beta — Luxury Watch Exchange</title>
     <meta
       name="description"
-      content="Version bêta IL-Watch : suivi de marché, onboarding KYC, dépôt de transactions et espace Academy."
+      content="IL-Watch : marché, patrimoine horloger, formations gratuites, assistant IA et marketplace de montres de luxe."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,14 +20,14 @@
     <div class="cursor-glow" aria-hidden="true"></div>
     <header class="site-header">
       <div class="container nav-wrap">
-        <a class="brand" href="#home">IL-<span>Watch</span></a>
+        <a class="brand" href="/">IL-<span>Watch</span></a>
         <nav>
-          <a href="#market">Marché</a>
-          <a href="#beta">Beta Platform</a>
-          <a href="#academy">Academy</a>
-          <a href="#legal">Légal</a>
+          <a href="/compte.html">Compte</a>
+          <a href="/patrimoine.html">Patrimoine</a>
+          <a href="/formations.html">Formations gratuites</a>
+          <a href="/marketplace.html">Marketplace</a>
         </nav>
-        <a class="nav-cta" href="#beta">Tester la bêta</a>
+        <a class="nav-cta" href="/compte.html">Mon espace</a>
       </div>
     </header>
 
@@ -36,112 +36,45 @@
         <div class="hero-bg" aria-hidden="true"></div>
         <div class="container hero-content">
           <p class="eyebrow reveal">IL-Watch Beta</p>
-          <h1 class="reveal">Front + Backend prêts pour votre version bêta.</h1>
+          <h1 class="reveal">L’écosystème complet du trading horloger de luxe.</h1>
           <p class="lead reveal">
-            Plateforme d'échange horloger premium avec API active : suivi de cours, inscription KYC,
-            dépôt de transactions sécurisées, et contenus de formation.
+            Créez votre compte sécurisé, centralisez votre patrimoine horloger, suivez les cours en
+            direct, apprenez gratuitement via les formations, échangez sur la marketplace, et faites-vous
+            guider par un agent IA pour vos achats/ventes.
           </p>
           <div class="hero-actions reveal">
-            <a class="btn btn-primary" href="#beta">Lancer un test maintenant</a>
-            <a class="btn btn-secondary" href="#deploy">Publier la bêta</a>
+            <a class="btn btn-primary" href="/compte.html">Créer / Gérer mon compte</a>
+            <a class="btn btn-secondary" href="/marketplace.html">Explorer la marketplace</a>
           </div>
           <div class="hero-metrics reveal">
-            <article><p class="kpi" data-target="4">0</p><span>modèles en base</span></article>
-            <article><p class="kpi" data-target="3">0</p><span>articles Academy</span></article>
-            <article><p class="kpi" data-target="24">0</p><span>h pour lancer en prod</span></article>
+            <article><p class="kpi" data-target="4">0</p><span>pages métiers dédiées</span></article>
+            <article><p class="kpi" data-target="12">0</p><span>widgets marché/news/academy</span></article>
+            <article><p class="kpi" data-target="1">0</p><span>assistant IA intégré</span></article>
           </div>
         </div>
       </section>
 
-      <section id="market" class="section container">
+      <section class="section container">
         <div class="section-head reveal">
-          <p class="eyebrow">Market Feed (API)</p>
-          <h2>Flux des montres suivies en temps réel (beta seed).</h2>
+          <p class="eyebrow">Nouveautés livrées</p>
+          <h2>Votre bêta IL-Watch est désormais structurée en modules complets.</h2>
         </div>
-        <div class="table-wrap reveal">
-          <table>
-            <thead>
-              <tr>
-                <th>Modèle</th>
-                <th>Prix actuel (€)</th>
-                <th>1 an</th>
-                <th>5 ans</th>
-                <th>Tendance</th>
-              </tr>
-            </thead>
-            <tbody id="watchesTableBody"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <section id="beta" class="section section-dark">
-        <div class="container two-col">
+        <div class="market-grid">
           <article class="glass card reveal">
-            <h3>1) Inscription KYC</h3>
-            <p>Document d'identité requis pour valider l'accès à la plateforme d'échange.</p>
-            <form id="registerForm" class="stack">
-              <input name="fullName" placeholder="Nom complet" required />
-              <input name="email" type="email" placeholder="Email" required />
-              <input name="idNumber" placeholder="Numéro pièce d'identité" required />
-              <button class="btn btn-primary" type="submit">Créer mon compte sécurisé</button>
-            </form>
-            <p id="registerMessage" class="feedback"></p>
+            <h3>Page Compte</h3>
+            <p>Profil utilisateur, onboarding KYC, widgets des dernières news, et accès agent IA.</p>
+            <a class="inline-link" href="/compte.html">Voir la page</a>
           </article>
-
           <article class="glass card reveal">
-            <h3>2) Dépôt transaction</h3>
-            <p>On s'occupe du matching, des flux sécurisés et du process import-export.</p>
-            <form id="transactionForm" class="stack">
-              <input name="watchModel" placeholder="Modèle de montre" required />
-              <select name="side" required>
-                <option value="">Type d'ordre</option>
-                <option value="buy">Achat</option>
-                <option value="sell">Vente</option>
-              </select>
-              <input name="amount" type="number" min="1" placeholder="Montant (€)" required />
-              <input name="country" placeholder="Pays (import/export)" required />
-              <button class="btn btn-primary" type="submit">Déposer la transaction</button>
-            </form>
-            <p id="transactionMessage" class="feedback"></p>
+            <h3>Page Mon Patrimoine Horloger</h3>
+            <p>Regroupement des montres possédées, valorisation instantanée et variations de cours.</p>
+            <a class="inline-link" href="/patrimoine.html">Voir la page</a>
           </article>
-        </div>
-      </section>
-
-      <section id="academy" class="section container">
-        <div class="section-head reveal">
-          <p class="eyebrow">Academy Feed</p>
-          <h2>Blogs pour apprendre à détecter les montres qui prennent de la valeur.</h2>
-        </div>
-        <div id="postsGrid" class="market-grid"></div>
-      </section>
-
-      <section id="deploy" class="section section-dark">
-        <div class="container reveal">
-          <p class="eyebrow">Go live</p>
-          <h2>Manip pour publier la bêta</h2>
-          <ol class="deploy-list">
-            <li>Installer Node.js 18+ sur le serveur.</li>
-            <li>Copier le repo puis lancer <code>node server.js</code>.</li>
-            <li>Mettre un reverse-proxy Nginx sur le port 3000.</li>
-            <li>Activer HTTPS (Let's Encrypt) avant ouverture publique.</li>
-            <li>Passer la base JSON vers PostgreSQL pour la prod.</li>
-          </ol>
-        </div>
-      </section>
-
-      <section id="legal" class="section legal">
-        <div class="container reveal">
-          <p class="eyebrow">Mentions légales</p>
-          <h2>Politique de confidentialité & limitation de responsabilité</h2>
-          <p>
-            IL-Watch met à disposition des données de marché, outils d'aide et workflows transactionnels.
-            Ces informations ne constituent pas un conseil financier personnalisé.
-          </p>
-          <p>
-            L'utilisateur reste seul responsable de ses décisions. Dans les limites légales applicables,
-            IL-Watch ne peut être tenu responsable des pertes directes ou indirectes liées à l'usage de
-            la plateforme.
-          </p>
+          <article class="glass card reveal">
+            <h3>Formations Gratuites + Marketplace</h3>
+            <p>Tous les contenus regroupés + échanges entre utilisateurs en mode marketplace.</p>
+            <a class="inline-link" href="/formations.html">Voir les formations</a>
+          </article>
         </div>
       </section>
     </main>
@@ -149,7 +82,7 @@
     <footer class="site-footer">
       <div class="container footer-wrap">
         <p>© 2026 IL-Watch Beta</p>
-        <a href="#legal">Confidentialité</a>
+        <a href="/marketplace.html">Marketplace</a>
       </div>
     </footer>
 
