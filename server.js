@@ -76,6 +76,28 @@ function routeApi(req, res, url) {
   if (req.method === 'GET' && url.pathname === '/api/formations') return sendJson(res, 200, db.formations || []);
   if (req.method === 'GET' && url.pathname === '/api/listings') return sendJson(res, 200, db.listings || []);
 
+
+  if (req.method === 'GET' && url.pathname === '/api/account-overview') {
+    const userId = Number(url.searchParams.get('userId') || 1);
+    const profile = (db.accountProfiles || []).find(item => Number(item.userId) === userId);
+    const portfolioRows = buildPortfolioRows(db, userId);
+    const computedValue = portfolioRows.reduce((acc, row) => acc + row.totalValue, 0);
+
+    return sendJson(res, 200, {
+      userId,
+      profile: profile || null,
+      computedPortfolioValue: computedValue,
+      watchCount: portfolioRows.length,
+      totalUnits: portfolioRows.reduce((acc, row) => acc + row.quantity, 0)
+    });
+  }
+
+  if (req.method === 'GET' && url.pathname === '/api/account-activities') {
+    const userId = Number(url.searchParams.get('userId') || 1);
+    const activities = (db.accountActivities || []).filter(item => Number(item.userId) === userId);
+    return sendJson(res, 200, activities);
+  }
+
   if (req.method === 'GET' && url.pathname === '/api/portfolio') {
     const userId = Number(url.searchParams.get('userId') || 1);
     return sendJson(res, 200, buildPortfolioRows(db, userId));

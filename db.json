@@ -149,5 +149,56 @@
       "seller": "CollectorParis"
     }
   ],
-  "transactions": []
+  "transactions": [],
+  "accountProfiles": [
+    {
+      "userId": 1,
+      "tier": "IL-Watch Privé",
+      "advisor": "Sophie Laurent",
+      "kycStatus": "Vérifié Premium",
+      "portfolioValue": 236500,
+      "liquidityScore": 91,
+      "riskProfile": "Équilibré +",
+      "preferredBrands": [
+        "Rolex",
+        "Patek Philippe",
+        "Audemars Piguet"
+      ],
+      "services": [
+        "Conciergerie dédiée",
+        "Séquestre premium",
+        "Assurance transport luxe"
+      ]
+    }
+  ],
+  "accountActivities": [
+    {
+      "id": 1,
+      "userId": 1,
+      "label": "KYC validé niveau Premium",
+      "date": "2026-02-10",
+      "type": "security"
+    },
+    {
+      "id": 2,
+      "userId": 1,
+      "label": "Alerte opportunité: Nautilus 5711 sous médiane",
+      "date": "2026-02-11",
+      "type": "market"
+    },
+    {
+      "id": 3,
+      "userId": 1,
+      "label": "Transaction #2041 sécurisée via séquestre",
+      "date": "2026-02-11",
+      "type": "transaction"
+    },
+    {
+      "id": 4,
+      "userId": 1,
+      "label": "Session IA: arbitrage AP vs Rolex",
+      "date": "2026-02-12",
+      "type": "ai"
+    }
+  ]
 }
