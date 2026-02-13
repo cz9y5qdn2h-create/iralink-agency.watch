@@ -1,0 +1,204 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "fullName": "Jean Test",
+      "email": "jean@test.com",
+      "idNumberMasked": "****3456",
+      "status": "verified",
+      "createdAt": "2026-02-12T18:04:25.368Z"
+    }
+  ],
+  "watches": [
+    {
+      "id": 1,
+      "model": "Rolex Submariner 116610LN",
+      "brand": "Rolex",
+      "currentPrice": 11200,
+      "change1Y": 8.1,
+      "change5Y": 34.4,
+      "trend": "up"
+    },
+    {
+      "id": 2,
+      "model": "Audemars Piguet Royal Oak 15500ST",
+      "brand": "AP",
+      "currentPrice": 39200,
+      "change1Y": -2.3,
+      "change5Y": 27.8,
+      "trend": "flat"
+    },
+    {
+      "id": 3,
+      "model": "Patek Philippe Nautilus 5711",
+      "brand": "Patek Philippe",
+      "currentPrice": 145000,
+      "change1Y": 5.7,
+      "change5Y": 83.6,
+      "trend": "up"
+    },
+    {
+      "id": 4,
+      "model": "Omega Speedmaster Moonwatch",
+      "brand": "Omega",
+      "currentPrice": 6200,
+      "change1Y": 3.2,
+      "change5Y": 21.5,
+      "trend": "up"
+    }
+  ],
+  "posts": [
+    {
+      "id": 1,
+      "title": "Comment repérer une montre à fort potentiel ?",
+      "category": "Analyse",
+      "excerpt": "Rareté, storytelling, historique des prix et profondeur de marché."
+    },
+    {
+      "id": 2,
+      "title": "Éviter les faux signaux de valorisation",
+      "category": "Risque",
+      "excerpt": "Ne pas confondre buzz court terme et tendance structurelle."
+    },
+    {
+      "id": 3,
+      "title": "Construire une stratégie long terme",
+      "category": "Méthodologie",
+      "excerpt": "Discipline, diversification et gestion émotionnelle."
+    }
+  ],
+  "news": [
+    {
+      "id": 1,
+      "title": "Rolex annonce une hausse de demande sur les sport models",
+      "source": "WatchWire"
+    },
+    {
+      "id": 2,
+      "title": "Le marché secondaire AP se stabilise au T1",
+      "source": "ChronoTimes"
+    },
+    {
+      "id": 3,
+      "title": "Import/export: nouvelles simplifications douanières UE",
+      "source": "LuxuryTrade News"
+    }
+  ],
+  "formations": [
+    {
+      "id": 1,
+      "level": "Débutant",
+      "title": "Comprendre la valeur d'une montre de luxe",
+      "summary": "Les bases pour estimer une montre : marque, référence, état, rareté.",
+      "tags": [
+        "Fondamentaux",
+        "Valorisation",
+        "Débutant"
+      ]
+    },
+    {
+      "id": 2,
+      "level": "Intermédiaire",
+      "title": "Lire les fluctuations du marché",
+      "summary": "Interpréter les cycles et éviter les décisions impulsives.",
+      "tags": [
+        "Marché",
+        "Volatilité",
+        "Timing"
+      ]
+    },
+    {
+      "id": 3,
+      "level": "Avancé",
+      "title": "Stratégies d'achat/vente et arbitrage",
+      "summary": "Mettre en place une stratégie d'échange robuste sur la durée.",
+      "tags": [
+        "Stratégie",
+        "Arbitrage",
+        "Risque"
+      ]
+    }
+  ],
+  "portfolio": [
+    {
+      "id": 1,
+      "userId": 1,
+      "model": "Rolex Submariner 116610LN",
+      "quantity": 1
+    },
+    {
+      "id": 2,
+      "userId": 1,
+      "model": "Omega Speedmaster Moonwatch",
+      "quantity": 2
+    }
+  ],
+  "listings": [
+    {
+      "id": 1,
+      "model": "Patek Philippe Nautilus 5711",
+      "price": 152000,
+      "condition": "Très bon état",
+      "seller": "Maison Lemaire"
+    },
+    {
+      "id": 2,
+      "model": "Audemars Piguet Royal Oak 15500ST",
+      "price": 40500,
+      "condition": "Neuf",
+      "seller": "CollectorParis"
+    }
+  ],
+  "transactions": [],
+  "accountProfiles": [
+    {
+      "userId": 1,
+      "tier": "IL-Watch Privé",
+      "advisor": "Sophie Laurent",
+      "kycStatus": "Vérifié Premium",
+      "portfolioValue": 236500,
+      "liquidityScore": 91,
+      "riskProfile": "Équilibré +",
+      "preferredBrands": [
+        "Rolex",
+        "Patek Philippe",
+        "Audemars Piguet"
+      ],
+      "services": [
+        "Conciergerie dédiée",
+        "Séquestre premium",
+        "Assurance transport luxe"
+      ]
+    }
+  ],
+  "accountActivities": [
+    {
+      "id": 1,
+      "userId": 1,
+      "label": "KYC validé niveau Premium",
+      "date": "2026-02-10",
+      "type": "security"
+    },
+    {
+      "id": 2,
+      "userId": 1,
+      "label": "Alerte opportunité: Nautilus 5711 sous médiane",
+      "date": "2026-02-11",
+      "type": "market"
+    },
+    {
+      "id": 3,
+      "userId": 1,
+      "label": "Transaction #2041 sécurisée via séquestre",
+      "date": "2026-02-11",
+      "type": "transaction"
+    },
+    {
+      "id": 4,
+      "userId": 1,
+      "label": "Session IA: arbitrage AP vs Rolex",
+      "date": "2026-02-12",
+      "type": "ai"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marketplace — IL-Watch Exchange</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a class="brand" href="/">IL-<span>Watch</span></a>
+        <nav>
+          <a href="/compte.html">Compte</a>
+          <a href="/patrimoine.html">Patrimoine</a>
+          <a href="/formations.html">Formations</a>
+          <a href="/marketplace.html">Marketplace</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="section container page-top">
+      <div class="section-head">
+        <p class="eyebrow">Marketplace classique</p>
+        <h2>Les utilisateurs peuvent échanger entre eux</h2>
+      </div>
+
+      <div id="marketplaceGrid" class="market-grid"></div>
+
+      <section class="section-mini">
+        <article class="glass card">
+          <h3>Publier une annonce</h3>
+          <form id="listingForm" class="stack">
+            <input name="model" placeholder="Modèle" required />
+            <input name="price" type="number" min="1" placeholder="Prix (€)" required />
+            <input name="condition" placeholder="État (neuf, très bon état...)" required />
+            <button class="btn btn-primary" type="submit">Publier mon annonce</button>
+          </form>
+          <p id="listingMessage" class="feedback"></p>
+        </article>
+      </section>
+    </main>
+
+    <script src="marketplace.js"></script>
+  </body>
+</html>
