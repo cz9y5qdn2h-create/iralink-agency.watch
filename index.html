@@ -3,89 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IL-Watch Beta — Luxury Watch Exchange</title>
-    <meta
-      name="description"
-      content="IL-Watch : marché, patrimoine horloger, formations gratuites, assistant IA et marketplace de montres de luxe."
-    />
+    <title>IL-Watch — Plateforme Hostinger Ready</title>
+    <meta name="description" content="IL-Watch, plateforme watch trading construite avec Vite + React + Express, compatible Hostinger." />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   </head>
   <body>
-    <div class="cursor-glow" aria-hidden="true"></div>
-    <header class="site-header">
-      <div class="container nav-wrap">
-        <a class="brand" href="/">IL-<span>Watch</span></a>
-        <nav>
-          <a href="/compte.html">Compte</a>
-          <a href="/patrimoine.html">Patrimoine</a>
-          <a href="/formations.html">Formations gratuites</a>
-          <a href="/marketplace.html">Marketplace</a>
-        </nav>
-        <a class="nav-cta" href="/compte.html">Mon espace</a>
-      </div>
-    </header>
-
-    <main id="home">
-      <section class="hero">
-        <div class="hero-bg" aria-hidden="true"></div>
-        <div class="container hero-content">
-          <p class="eyebrow reveal">IL-Watch Beta</p>
-          <h1 class="reveal">L’écosystème complet du trading horloger de luxe.</h1>
-          <p class="lead reveal">
-            Créez votre compte sécurisé, centralisez votre patrimoine horloger, suivez les cours en
-            direct, apprenez gratuitement via les formations, échangez sur la marketplace, et faites-vous
-            guider par un agent IA pour vos achats/ventes.
-          </p>
-          <div class="hero-actions reveal">
-            <a class="btn btn-primary" href="/compte.html">Créer / Gérer mon compte</a>
-            <a class="btn btn-secondary" href="/marketplace.html">Explorer la marketplace</a>
-          </div>
-          <div class="hero-metrics reveal">
-            <article><p class="kpi" data-target="4">0</p><span>pages métiers dédiées</span></article>
-            <article><p class="kpi" data-target="12">0</p><span>widgets marché/news/academy</span></article>
-            <article><p class="kpi" data-target="1">0</p><span>assistant IA intégré</span></article>
-          </div>
-        </div>
-      </section>
-
-      <section class="section container">
-        <div class="section-head reveal">
-          <p class="eyebrow">Nouveautés livrées</p>
-          <h2>Votre bêta IL-Watch est désormais structurée en modules complets.</h2>
-        </div>
-        <div class="market-grid">
-          <article class="glass card reveal">
-            <h3>Page Compte</h3>
-            <p>Profil utilisateur, onboarding KYC, widgets des dernières news, et accès agent IA.</p>
-            <a class="inline-link" href="/compte.html">Voir la page</a>
-          </article>
-          <article class="glass card reveal">
-            <h3>Page Mon Patrimoine Horloger</h3>
-            <p>Regroupement des montres possédées, valorisation instantanée et variations de cours.</p>
-            <a class="inline-link" href="/patrimoine.html">Voir la page</a>
-          </article>
-          <article class="glass card reveal">
-            <h3>Formations Gratuites + Marketplace</h3>
-            <p>Tous les contenus regroupés + échanges entre utilisateurs en mode marketplace.</p>
-            <a class="inline-link" href="/formations.html">Voir les formations</a>
-          </article>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="container footer-wrap">
-        <p>© 2026 IL-Watch Beta</p>
-        <a href="/marketplace.html">Marketplace</a>
-      </div>
-    </footer>
-
-    <script src="script.js"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

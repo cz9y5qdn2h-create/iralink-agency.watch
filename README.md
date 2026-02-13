@@ -1,17 +1,37 @@
-# WatchFlow (concept)
+# IL-Watch — Refonte Hostinger (Vite + React + Express)
 
-Plateforme communautaire pour **acheter, vendre, échanger et entretenir des montres**.
+Cette version a été entièrement refaite pour rester alignée avec les frameworks officiellement supportés par Hostinger.
 
-Ce dépôt contient un plan concret pour lancer une V1 **gratuitement** (ou quasi gratuitement) avec une architecture disponible et évolutive.
+## Stack
 
-## Documents
+- **Front-end**: Vite + React + React Router
+- **API**: Express.js
+- **Données**: `db.json` (fichier local, simple pour MVP)
 
-- `docs/deploiement-gratuit.md` : comment publier maintenant, étape par étape.
-- `docs/plateforme-complete.md` : produit complet (marketplace, réseau social, entretien, réparations, marges).
-- `docs/roadmap-90-jours.md` : feuille de route claire pour sortir une plateforme utilisable rapidement.
+## Lancer en local
 
-## Principe clé
+```bash
+npm install
+npm run server
+npm run dev
+```
 
-1. Démarrer avec une stack gratuite : **Cloudflare Pages + Supabase + Cloudflare R2**.
-2. Mettre les fonctions sensibles côté serveur (paiements, marges, arbitrage litiges).
-3. Monétiser via commissions services (réparations, nettoyage, sourcing boîtes/papiers), pas via abonnement obligatoire.
+- Front-end: `http://localhost:5173`
+- API: `http://localhost:3000/api/health`
+
+## Build production
+
+```bash
+npm run build
+npm run server
+```
+
+Le serveur Express sert automatiquement `dist/` lorsqu'il existe.
+
+## Pages incluses
+
+- `/` : dashboard d'accueil
+- `/compte` : onboarding + résumé compte
+- `/patrimoine` : portefeuille + ajout de montres
+- `/formations` : formations gratuites
+- `/marketplace` : annonces + publication
