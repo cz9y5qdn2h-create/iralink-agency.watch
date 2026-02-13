@@ -1,17 +1,46 @@
-# WatchFlow (concept)
+# IL-Watch — Version production Hostinger (Vite + React + Express)
 
-Plateforme communautaire pour **acheter, vendre, échanger et entretenir des montres**.
+Cette version est pensée pour être **opérationnelle en production** avec une base moderne, maintenable et orientée conversion/SEO.
 
-Ce dépôt contient un plan concret pour lancer une V1 **gratuitement** (ou quasi gratuitement) avec une architecture disponible et évolutive.
+## Stack technique
 
-## Documents
+- **Front-end** : Vite + React + React Router
+- **SEO** : meta dynamiques par page (Helmet), Open Graph, Twitter Cards, JSON-LD, `robots.txt`, `sitemap.xml`
+- **API** : Express + Helmet + Compression
+- **Données MVP** : `db.json`
 
-- `docs/deploiement-gratuit.md` : comment publier maintenant, étape par étape.
-- `docs/plateforme-complete.md` : produit complet (marketplace, réseau social, entretien, réparations, marges).
-- `docs/roadmap-90-jours.md` : feuille de route claire pour sortir une plateforme utilisable rapidement.
+## Démarrage local
 
-## Principe clé
+```bash
+npm install
+npm run server
+npm run dev
+```
 
-1. Démarrer avec une stack gratuite : **Cloudflare Pages + Supabase + Cloudflare R2**.
-2. Mettre les fonctions sensibles côté serveur (paiements, marges, arbitrage litiges).
-3. Monétiser via commissions services (réparations, nettoyage, sourcing boîtes/papiers), pas via abonnement obligatoire.
+- Front : `http://localhost:5173`
+- API : `http://localhost:3000/api/health`
+
+## Build production
+
+```bash
+npm run build
+npm run server
+```
+
+Le serveur Express sert automatiquement le dossier `dist/`.
+
+## SEO inclus
+
+- Balises `title` et `description` spécifiques par page.
+- Balises Open Graph et Twitter Cards.
+- Données structurées JSON-LD (WebSite / CollectionPage).
+- Fichiers `public/robots.txt` et `public/sitemap.xml`.
+- URL canonique prévue sur `https://iralink-agency.watch`.
+
+## Pages métiers
+
+- `/` : accueil + tendances marché
+- `/compte` : onboarding & résumé compte
+- `/patrimoine` : portefeuille & ajout de montres
+- `/formations` : academy gratuite
+- `/marketplace` : catalogue, recherche et publication d'annonces
