@@ -62,10 +62,8 @@ body {
 }
 
 .nav-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  display: grid;
+  gap: 0.35rem;
   padding: 1rem 0;
 }
 
@@ -73,37 +71,17 @@ body {
   margin: 0;
   font-size: 1.35rem;
   letter-spacing: 0.08em;
-  text-transform: uppercase;
+  text-transform: lowercase;
 }
 
 .brand span {
   color: #d7b57a;
 }
 
-nav {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
-nav a {
-  color: #dfd5c7;
-  text-decoration: none;
-  padding: 0.38rem 0.78rem;
-  border-radius: 999px;
-  border: 1px solid transparent;
-  transition: all 0.2s ease;
-}
-
-nav a:hover {
-  border-color: rgba(215, 181, 122, 0.38);
-  color: #fff;
-}
-
-nav a.active {
-  background: linear-gradient(120deg, #d4ad6a, #8a6b3b);
-  color: #140f08;
-  font-weight: 600;
+.tagline {
+  margin: 0;
+  color: #b9c3da;
+  font-size: 0.92rem;
 }
 
 .app-main {
@@ -169,6 +147,26 @@ nav a.active {
 
 .inner-card h3 {
   margin-top: 0;
+}
+
+
+.cta-link {
+  display: inline-flex;
+  margin-top: 0.5rem;
+  color: #fff;
+  text-decoration: none;
+  border: 1px solid rgba(215, 181, 122, 0.4);
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+}
+
+.cta-link:hover {
+  border-color: rgba(215, 181, 122, 0.8);
+}
+
+.helper {
+  color: #b5a58d;
+  margin-bottom: 0;
 }
 
 .form {
@@ -248,12 +246,4 @@ button:hover {
 }
 
 @media (max-width: 680px) {
-  .nav-wrap {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  nav {
-    gap: 0.45rem;
-  }
 }

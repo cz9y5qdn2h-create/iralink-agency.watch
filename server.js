@@ -130,6 +130,28 @@ app.post('/api/listings', (req, res) => {
   return res.status(201).json({ message: 'Annonce publiée avec succès.', listing });
 });
 
+
+app.post('/api/product-requests', (req, res) => {
+  const { company, contact, useCase } = req.body || {};
+  if (!company || !contact || !useCase) {
+    return res.status(400).json({ error: 'company, contact et useCase sont requis.' });
+  }
+
+  const db = readDb();
+  const productRequest = {
+    id: (db.productRequests || []).length + 1,
+    company,
+    contact,
+    useCase,
+    status: 'new',
+    createdAt: new Date().toISOString()
+  };
+
+  db.productRequests = db.productRequests || [];
+  db.productRequests.push(productRequest);
+  writeDb(db);
+  return res.status(201).json({ message: 'Demande reçue. Notre équipe vous contacte rapidement.', request: productRequest });
+});
 app.post('/api/ai-assistant', (req, res) => {
   const text = String(req.body?.message || '').toLowerCase();
   if (!text) return res.status(400).json({ error: 'message requis.' });

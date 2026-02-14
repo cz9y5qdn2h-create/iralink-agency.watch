@@ -1,45 +1,81 @@
-import useApiData from '../components/useApiData';
+import { useState } from 'react';
 import SectionCard from '../components/SectionCard';
 
-const pillars = [
+const ecosystems = [
   {
-    title: 'Authentification infalsifiable',
-    text: 'Association physique RFID + token blockchain pour empêcher la copie et sécuriser l’identité de chaque montre.'
+    title: 'Accès opérateur Eralink Agency',
+    text: 'Une gouvernance centrale avec rôles, audit de décisions IA et contrôle humain pour valider les actions critiques.'
   },
   {
-    title: 'Traçabilité hiérarchique',
-    text: 'Chaîne mère, sous-chaînes par marque puis modèle pour auditer chaque variation et son historique complet.'
+    title: 'Multi-blockchains interconnectées',
+    text: 'Connecteurs EVM, L2 et registres privés pour centraliser la supervision sans verrouiller l’écosystème sur une seule chaîne.'
   },
   {
-    title: 'Plateforme unifiée',
-    text: 'Un même cockpit pour collectionneurs, marques, revendeurs et administrateurs avec permissions granulaires.'
+    title: 'Défense autonome + notifications',
+    text: 'Détection des menaces, score de risque en temps réel et alertes applicatives pour activer rapidement les équipes.'
+  },
+  {
+    title: 'Pont puce ↔ token',
+    text: 'Architecture prête pour relier puces physiques et actifs numériques afin de renforcer l’infalsifiabilité produit.'
   }
 ];
 
-const roadmap = [
-  'Recherche & cadrage des rôles (particuliers, pros, admin, employés)',
-  'Développement front web/mobile orienté portefeuille & ownership',
-  'Intégration API blockchain, smart contracts et vérification RFID',
-  'Tests de sécurité (MFA, récupération token, protocoles d’accès)'
+const modules = [
+  'Hub de supervision blockchain avec traces horodatées.',
+  'Assistant IA décisionnel (recommandations, pas d’action irréversible sans validation).',
+  'API de raccordement pour futurs produits et applications partenaires.',
+  'Système de tickets pour demandes de déploiement et intégration métier.'
 ];
 
 export default function HomePage() {
-  const { data: watches, loading } = useApiData('/api/watches', []);
+  const [accountForm, setAccountForm] = useState({ fullName: 'Matéo Coutard', email: '', idNumber: '' });
+  const [productForm, setProductForm] = useState({ company: '', contact: '', useCase: '' });
+  const [accountMessage, setAccountMessage] = useState('');
+  const [productMessage, setProductMessage] = useState('');
+
+  const submitAccount = async event => {
+    event.preventDefault();
+    setAccountMessage('');
+
+    const response = await fetch('/api/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(accountForm)
+    });
+
+    const payload = await response.json();
+    setAccountMessage(payload.message || payload.error || 'Demande envoyée.');
+  };
+
+  const submitProductRequest = async event => {
+    event.preventDefault();
+    setProductMessage('');
+
+    const response = await fetch('/api/product-requests', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(productForm)
+    });
+
+    const payload = await response.json();
+    setProductMessage(payload.message || payload.error || 'Demande envoyée.');
+  };
 
   return (
     <div className="stack">
       <section className="hero card">
-        <p className="eyebrow">Fiche technique finale iralink-agency</p>
-        <h2>Passeport numérique sécurisé pour montres d’exception</h2>
+        <p className="eyebrow">Vision de plateforme</p>
+        <h2>Un écosystème blockchain autonome, sobre et prêt pour l’échelle entreprise</h2>
         <p>
-          L’application connecte de façon infalsifiable la montre physique, son identité RFID et son NFT afin de
-          garantir authenticité, traçabilité et confiance sur le marché secondaire.
+          Cette version présente le cadrage : architecture multi-chaînes, intelligence embarquée, supervision Eralink Agency
+          et connecteur futur puce/token. L’objectif est de lancer un socle robuste avant déploiement complet.
         </p>
+        <a className="cta-link" href="#inscription">S’inscrire et lancer une demande</a>
       </section>
 
-      <SectionCard title="Fondations produit" subtitle="Vision stratégique">
+      <SectionCard title="Fondations techniques" subtitle="Ce qui est prévu dans le socle">
         <div className="grid-2">
-          {pillars.map(item => (
+          {ecosystems.map(item => (
             <article key={item.title} className="inner-card">
               <h3>{item.title}</h3>
               <p>{item.text}</p>
@@ -48,30 +84,67 @@ export default function HomePage() {
         </div>
       </SectionCard>
 
-      <SectionCard title="Tendances marché" subtitle="Montres tokenisées suivies">
-        {loading ? (
-          <p>Chargement des prix...</p>
-        ) : (
-          <div className="grid-2">
-            {watches.map(item => (
-              <article key={item.id} className="inner-card">
-                <h3>{item.model}</h3>
-                <p>{item.brand}</p>
-                <p>{item.currentPrice.toLocaleString('fr-FR')} €</p>
-                <span className={item.change1Y >= 0 ? 'up' : 'down'}>{item.change1Y}% (1 an)</span>
-              </article>
-            ))}
-          </div>
-        )}
+      <SectionCard title="Modules en préparation" subtitle="Conçus pour se raccorder facilement à vos produits">
+        <ul className="list">
+          {modules.map(item => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
       </SectionCard>
 
-      <SectionCard title="Roadmap d’exécution" subtitle="Du prototype au déploiement">
-        <ol className="list numbered-list">
-          {roadmap.map(step => (
-            <li key={step}>{step}</li>
-          ))}
-        </ol>
-      </SectionCard>
+      <section id="inscription" className="grid-2">
+        <SectionCard title="Créer un accès Eralink Agency" subtitle="Inscription pilote">
+          <form className="form" onSubmit={submitAccount}>
+            <input
+              placeholder="Nom complet"
+              value={accountForm.fullName}
+              onChange={event => setAccountForm({ ...accountForm, fullName: event.target.value })}
+              required
+            />
+            <input
+              type="email"
+              placeholder="Email professionnel"
+              value={accountForm.email}
+              onChange={event => setAccountForm({ ...accountForm, email: event.target.value })}
+              required
+            />
+            <input
+              placeholder="Pièce d'identité"
+              value={accountForm.idNumber}
+              onChange={event => setAccountForm({ ...accountForm, idNumber: event.target.value })}
+              required
+            />
+            <button type="submit">Créer mon accès</button>
+          </form>
+          <p className="helper">Aucun tarif affiché : contactez-nous pour en savoir plus.</p>
+          {accountMessage && <p>{accountMessage}</p>}
+        </SectionCard>
+
+        <SectionCard title="Demande produit" subtitle="Contact uniquement (sans prix)">
+          <form className="form" onSubmit={submitProductRequest}>
+            <input
+              placeholder="Entreprise"
+              value={productForm.company}
+              onChange={event => setProductForm({ ...productForm, company: event.target.value })}
+              required
+            />
+            <input
+              placeholder="Contact"
+              value={productForm.contact}
+              onChange={event => setProductForm({ ...productForm, contact: event.target.value })}
+              required
+            />
+            <input
+              placeholder="Besoin principal"
+              value={productForm.useCase}
+              onChange={event => setProductForm({ ...productForm, useCase: event.target.value })}
+              required
+            />
+            <button type="submit">Contacter pour en savoir plus</button>
+          </form>
+          {productMessage && <p>{productMessage}</p>}
+        </SectionCard>
+      </section>
     </div>
   );
 }
