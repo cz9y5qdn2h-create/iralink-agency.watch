@@ -15,7 +15,10 @@ const links = [
 
 export default function App() {
   return (
-    <>
+    <div className="app-shell">
+      <div className="backdrop-orb orb-left" aria-hidden="true" />
+      <div className="backdrop-orb orb-right" aria-hidden="true" />
+
       <header className="site-header">
         <div className="container nav-wrap">
           <h1 className="brand">IL-<span>Watch</span></h1>
@@ -38,6 +41,10 @@ export default function App() {
           <Route path="/marketplace" element={<MarketplacePage />} />
         </Routes>
       </main>
-    </>
+
+      <footer className="site-footer container">
+        <p>IL-Watch Private Club • Analyse, acquisition & valorisation horlogère.</p>
+      </footer>
+    </div>
   );
 }
