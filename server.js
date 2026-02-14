@@ -19,6 +19,9 @@ const writeDb = data => fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
 
 const findWatch = (db, model) => db.watches.find(item => item.model.toLowerCase() === String(model).toLowerCase());
 
+
+const sortByNewest = rows => [...rows].sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+
 const buildPortfolioRows = (db, userId) => db.portfolio
   .filter(item => Number(item.userId) === Number(userId))
   .map(entry => {
@@ -42,6 +45,25 @@ app.get('/api/posts', (_, res) => res.json(readDb().posts));
 app.get('/api/news', (_, res) => res.json(readDb().news || []));
 app.get('/api/formations', (_, res) => res.json(readDb().formations || []));
 app.get('/api/listings', (_, res) => res.json(readDb().listings || []));
+
+
+app.get('/api/product-requests', (req, res) => {
+  const limit = Number(req.query.limit || 20);
+  const rows = sortByNewest(readDb().productRequests || []).slice(0, Math.max(1, limit));
+  res.json(rows);
+});
+
+app.get('/api/platform-metrics', (_, res) => {
+  const db = readDb();
+  const pendingRequests = (db.productRequests || []).filter(item => item.status !== 'closed').length;
+
+  res.json({
+    liveChains: 12,
+    pendingRequests,
+    totalUsers: (db.users || []).length,
+    threatLevel: pendingRequests > 10 ? 'élevé' : 'modéré'
+  });
+});
 
 app.get('/api/account-overview', (req, res) => {
   const userId = Number(req.query.userId || 1);
@@ -130,6 +152,28 @@ app.post('/api/listings', (req, res) => {
   return res.status(201).json({ message: 'Annonce publiée avec succès.', listing });
 });
 
+
+app.post('/api/product-requests', (req, res) => {
+  const { company, contact, useCase } = req.body || {};
+  if (!company || !contact || !useCase) {
+    return res.status(400).json({ error: 'company, contact et useCase sont requis.' });
+  }
+
+  const db = readDb();
+  const productRequest = {
+    id: (db.productRequests || []).length + 1,
+    company: String(company).trim(),
+    contact: String(contact).trim(),
+    useCase: String(useCase).trim(),
+    status: 'new',
+    createdAt: new Date().toISOString()
+  };
+
+  db.productRequests = db.productRequests || [];
+  db.productRequests.push(productRequest);
+  writeDb(db);
+  return res.status(201).json({ message: 'Demande reçue. Notre équipe vous contacte rapidement.', request: productRequest });
+});
 app.post('/api/ai-assistant', (req, res) => {
   const text = String(req.body?.message || '').toLowerCase();
   if (!text) return res.status(400).json({ error: 'message requis.' });

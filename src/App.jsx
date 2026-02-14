@@ -1,17 +1,13 @@
-import { NavLink, Route, Routes } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import AccountPage from './pages/AccountPage';
-import PortfolioPage from './pages/PortfolioPage';
-import LearningPage from './pages/LearningPage';
-import MarketplacePage from './pages/MarketplacePage';
 
-const links = [
-  { to: '/', label: 'Accueil' },
-  { to: '/compte', label: 'Compte' },
-  { to: '/patrimoine', label: 'Patrimoine' },
-  { to: '/formations', label: 'Formations' },
-  { to: '/marketplace', label: 'Marketplace' }
-];
+function LogoMark() {
+  return (
+    <div className="logo-wrap" aria-hidden="true">
+      <span className="logo-ring" />
+      <span className="logo-core" />
+    </div>
+  );
+}
 
 export default function App() {
   return (
@@ -21,29 +17,23 @@ export default function App() {
 
       <header className="site-header">
         <div className="container nav-wrap">
-          <h1 className="brand">IL-<span>Watch</span></h1>
-          <nav>
-            {links.map(link => (
-              <NavLink key={link.to} to={link.to} className={({ isActive }) => isActive ? 'active' : ''}>
-                {link.label}
-              </NavLink>
-            ))}
-          </nav>
+          <div className="brand-line">
+            <LogoMark />
+            <div>
+              <h1 className="brand">iralink<span>.agency</span></h1>
+              <p className="tagline">AI-native blockchain operations</p>
+            </div>
+          </div>
+          <p className="subtagline">Identité sombre, premium et technologique basée sur votre logo noir.</p>
         </div>
       </header>
 
       <main className="container app-main">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/compte" element={<AccountPage />} />
-          <Route path="/patrimoine" element={<PortfolioPage />} />
-          <Route path="/formations" element={<LearningPage />} />
-          <Route path="/marketplace" element={<MarketplacePage />} />
-        </Routes>
+        <HomePage />
       </main>
 
       <footer className="site-footer container">
-        <p>IL-Watch Private Club • Analyse, acquisition & valorisation horlogère.</p>
+        <p>iralink Agency — Beta opérationnelle • accès, demandes produit et supervision en direct.</p>
       </footer>
     </div>
   );
