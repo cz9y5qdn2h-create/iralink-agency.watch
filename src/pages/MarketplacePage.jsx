@@ -2,6 +2,12 @@ import { useState } from 'react';
 import SectionCard from '../components/SectionCard';
 import useApiData from '../components/useApiData';
 
+const verificationFlow = [
+  'Vérification RFID et correspondance du token avant publication',
+  'Contrôle historique de propriété et statut des transactions',
+  'Validation opérée par iralink-agency pour les opérations sensibles'
+];
+
 export default function MarketplacePage() {
   const { data: listings, loading } = useApiData('/api/listings', []);
   const [draft, setDraft] = useState({ model: '', price: '', condition: '', seller: '' });
@@ -20,7 +26,7 @@ export default function MarketplacePage() {
 
   return (
     <div className="stack">
-      <SectionCard title="Marketplace" subtitle="Acheter / vendre / échanger">
+      <SectionCard title="Marketplace" subtitle="Acheter / vendre / échanger avec preuve d’authenticité">
         {loading ? <p>Chargement...</p> : (
           <div className="grid-2">
             {listings.map(item => (
@@ -33,6 +39,12 @@ export default function MarketplacePage() {
             ))}
           </div>
         )}
+      </SectionCard>
+
+      <SectionCard title="Workflow de vérification" subtitle="Intégration plateformes de revente">
+        <ul className="list">
+          {verificationFlow.map(step => <li key={step}>{step}</li>)}
+        </ul>
       </SectionCard>
 
       <SectionCard title="Publier une annonce" subtitle="Endpoint POST /api/listings">
