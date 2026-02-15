@@ -40,9 +40,14 @@ export default function HomePage() {
     let mounted = true;
 
     const loadChain = async () => {
-      const response = await fetch('/api/blockchain/status');
-      const payload = await response.json();
-      if (mounted) setChainStatus(payload);
+      try {
+        const response = await fetch('/api/blockchain/status');
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.error || 'Impossible de charger le statut blockchain.');
+        if (mounted) setChainStatus(payload);
+      } catch (error) {
+        if (mounted) setChainMessage(error.message || 'Erreur réseau blockchain.');
+      }
     };
 
     loadChain();
@@ -63,14 +68,19 @@ export default function HomePage() {
       metadata: { qualityScore: 99, source: 'demo_batch' }
     }));
 
-    const response = await fetch('/api/blockchain/tx/batch', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ transactions })
-    });
+    try {
+      const response = await fetch('/api/blockchain/tx/batch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ transactions })
+      });
 
-    const payload = await response.json();
-    setChainMessage(payload.message || payload.error || 'Batch envoyé.');
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || 'Envoi batch impossible.');
+      setChainMessage(payload.message || 'Batch envoyé.');
+    } catch (error) {
+      setChainMessage(error.message || 'Erreur envoi batch.');
+    }
   };
 
   const submitAccount = async event => {

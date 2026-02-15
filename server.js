@@ -40,12 +40,15 @@ const buildPortfolioRows = (db, userId) => db.portfolio
 const BLOCK_TIME_MS = 1200;
 const MAX_TX_PER_BLOCK = 400;
 const MAX_MEMPOOL_SIZE = 8000;
+const MAX_CHAIN_BLOCKS = 3000;
+const MAX_TX_INDEX_SIZE = 100000;
 const VALIDATORS = Object.freeze(['eralink-node-a', 'eralink-node-b', 'eralink-node-c']);
 const chainState = {
   chainId: 'eralink-watch-mainnet',
   blocks: [],
   mempool: [],
   txByHash: new Map(),
+  txHashQueue: [],
   processedTx: 0,
   startedAt: Date.now(),
   validatorIndex: 0
@@ -119,6 +122,13 @@ const queueTransaction = tx => {
 
   chainState.mempool.push(tx);
   chainState.txByHash.set(tx.hash, { status: 'queued', tx });
+  chainState.txHashQueue.push(tx.hash);
+
+  while (chainState.txHashQueue.length > MAX_TX_INDEX_SIZE) {
+    const oldHash = chainState.txHashQueue.shift();
+    chainState.txByHash.delete(oldHash);
+  }
+
   return { ok: true };
 };
 
@@ -136,6 +146,10 @@ setInterval(() => {
   const batch = chainState.mempool.splice(0, MAX_TX_PER_BLOCK);
   const block = appendBlock(batch);
   batch.forEach(tx => chainState.txByHash.set(tx.hash, { status: 'confirmed', blockIndex: block.index, tx }));
+
+  while (chainState.blocks.length > MAX_CHAIN_BLOCKS) {
+    chainState.blocks.shift();
+  }
 }, BLOCK_TIME_MS);
 
 const getBlockchainStats = () => {
@@ -172,7 +186,8 @@ app.get('/api/blockchain/status', (_, res) => {
 });
 
 app.get('/api/blockchain/blocks', (req, res) => {
-  const limit = Math.min(Number(req.query.limit || 10), 100);
+  const parsedLimit = Number(req.query.limit || 10);
+  const limit = Number.isFinite(parsedLimit) ? Math.max(1, Math.min(parsedLimit, 100)) : 10;
   const blocks = chainState.blocks.slice(-limit).reverse().map(block => ({
     index: block.index,
     hash: block.hash,
@@ -219,12 +234,18 @@ app.post('/api/blockchain/tx/batch', (req, res) => {
     return res.status(400).json({ error: `batch limité à ${MAX_TX_PER_BLOCK} transactions.` });
   }
 
-  const accepted = [];
   for (const incomingTx of transactions) {
     if (!incomingTx?.type || !incomingTx?.assetId || !incomingTx?.ownerId) {
       return res.status(400).json({ error: 'Chaque transaction doit contenir type, assetId et ownerId.' });
     }
+  }
 
+  if (chainState.mempool.length + transactions.length > MAX_MEMPOOL_SIZE) {
+    return res.status(429).json({ error: 'Mempool saturé, réessayez dans quelques secondes.', accepted: 0 });
+  }
+
+  const accepted = [];
+  for (const incomingTx of transactions) {
     const tx = createTransaction(incomingTx);
     const queued = queueTransaction(tx);
     if (!queued.ok) {
