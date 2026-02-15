@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SectionCard from '../components/SectionCard';
 
 const ecosystems = [
@@ -32,6 +32,56 @@ export default function HomePage() {
   const [productForm, setProductForm] = useState({ company: '', contact: '', useCase: '' });
   const [accountMessage, setAccountMessage] = useState('');
   const [productMessage, setProductMessage] = useState('');
+  const [chainStatus, setChainStatus] = useState(null);
+  const [chainMessage, setChainMessage] = useState('');
+
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadChain = async () => {
+      try {
+        const response = await fetch('/api/blockchain/status');
+        const payload = await response.json();
+        if (!response.ok) throw new Error(payload.error || 'Impossible de charger le statut blockchain.');
+        if (mounted) setChainStatus(payload);
+      } catch (error) {
+        if (mounted) setChainMessage(error.message || 'Erreur réseau blockchain.');
+      }
+    };
+
+    loadChain();
+    const timer = setInterval(loadChain, 2200);
+
+    return () => {
+      mounted = false;
+      clearInterval(timer);
+    };
+  }, []);
+
+  const pushSampleBatch = async () => {
+    setChainMessage('');
+    const transactions = Array.from({ length: 25 }, (_, index) => ({
+      type: 'watch_trace',
+      assetId: `batch-watch-${Date.now()}-${index + 1}`,
+      ownerId: 'eralink-agency',
+      metadata: { qualityScore: 99, source: 'demo_batch' }
+    }));
+
+    try {
+      const response = await fetch('/api/blockchain/tx/batch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ transactions })
+      });
+
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || 'Envoi batch impossible.');
+      setChainMessage(payload.message || 'Batch envoyé.');
+    } catch (error) {
+      setChainMessage(error.message || 'Erreur envoi batch.');
+    }
+  };
 
   const submitAccount = async event => {
     event.preventDefault();
@@ -82,6 +132,30 @@ export default function HomePage() {
             </article>
           ))}
         </div>
+      </SectionCard>
+
+
+
+      <SectionCard title="Blockchain prête à l'emploi" subtitle="Mainnet PoA optimisé pour la latence et le débit">
+        <div className="grid-2">
+          <article className="inner-card">
+            <h3>État réseau</h3>
+            <p>Statut: <span className="pill">{chainStatus?.status || 'loading'}</span></p>
+            <p>Consensus: {chainStatus?.consensus || '—'}</p>
+            <p>Hauteur bloc: {chainStatus?.blockHeight ?? '—'}</p>
+            <p>Mempool: {chainStatus?.mempoolSize ?? '—'} tx</p>
+          </article>
+
+          <article className="inner-card">
+            <h3>Performance</h3>
+            <p>TPS observé: {chainStatus?.estimatedTps ?? '—'}</p>
+            <p>Capacité max: {chainStatus?.capacityPerSecond ?? '—'} tx/s</p>
+            <p>Temps de bloc: {chainStatus?.blockTimeMs ?? '—'} ms</p>
+            <p>Transactions traitées: {chainStatus?.processedTx ?? '—'}</p>
+          </article>
+        </div>
+        <button type="button" onClick={pushSampleBatch}>Injecter un batch de test (25 tx)</button>
+        {chainMessage && <p>{chainMessage}</p>}
       </SectionCard>
 
       <SectionCard title="Modules en préparation" subtitle="Conçus pour se raccorder facilement à vos produits">
