@@ -38,6 +38,18 @@
       </section>
 
       <section class="card">
+        <h2>Moteur buy_score configurable</h2>
+        <p class="muted">Ajustez les poids : le total est automatiquement normalisé.</p>
+        <form id="scoreConfigForm" class="score-config">
+          <label>Prix vs retail <input id="weightPrice" type="range" min="0" max="100" value="40" /></label>
+          <label>Tendance prix <input id="weightTrend" type="range" min="0" max="100" value="25" /></label>
+          <label>Confiance source <input id="weightSource" type="range" min="0" max="100" value="20" /></label>
+          <label>Disponibilité <input id="weightAvailability" type="range" min="0" max="100" value="15" /></label>
+        </form>
+        <p id="scoreConfigSummary" class="muted"></p>
+      </section>
+
+      <section class="card">
         <h2>Fiche montre & historique prix</h2>
         <label>
           Sélection montre
@@ -106,7 +118,7 @@
           <select id="compareA"></select>
           <select id="compareB"></select>
           <select id="compareC"></select>
-          <button id="compareBtn">Comparer</button>
+          <button id="compareBtn" type="button">Comparer</button>
         </div>
         <div id="comparisonTable"></div>
       </section>

@@ -26,6 +26,7 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
+  gap: 1rem;
 }
 
 h1,
@@ -84,11 +85,17 @@ button.ghost {
 .filters,
 .alert-form,
 .notification-form,
-.compare-selectors {
+.compare-selectors,
+.score-config {
   display: grid;
   gap: 0.6rem;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   margin-bottom: 0.8rem;
+}
+
+input[type='range'] {
+  accent-color: var(--accent);
+  padding: 0;
 }
 
 .list {
@@ -126,6 +133,11 @@ button.ghost {
 .badge.warning {
   background: color-mix(in srgb, var(--warning), transparent 72%);
   color: var(--warning);
+}
+
+.badge.score {
+  background: color-mix(in srgb, var(--accent), transparent 72%);
+  color: #8ac2ff;
 }
 
 .watch-details {

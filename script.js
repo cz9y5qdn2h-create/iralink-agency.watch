@@ -1,3 +1,5 @@
+const STORAGE_KEY = "watch-intelligence-state-v2";
+
 const watches = [
   {
     id: "rolex-126610ln",
@@ -6,7 +8,6 @@ const watches = [
     reference: "126610LN",
     currentPrice: 12850,
     estimatedRetail: 10400,
-    budgetFit: 13000,
     sourceScore: 92,
     availability: "En stock",
     history: [11800, 12020, 12150, 12300, 12620, 12850],
@@ -18,7 +19,6 @@ const watches = [
     reference: "310.30.42.50.01.001",
     currentPrice: 6650,
     estimatedRetail: 7600,
-    budgetFit: 7000,
     sourceScore: 88,
     availability: "Sous 24h",
     history: [7100, 6980, 6860, 6790, 6710, 6650],
@@ -30,7 +30,6 @@ const watches = [
     reference: "5711/1A",
     currentPrice: 109000,
     estimatedRetail: 34000,
-    budgetFit: 120000,
     sourceScore: 77,
     availability: "Complet",
     history: [145000, 138000, 129000, 122500, 116000, 109000],
@@ -42,7 +41,6 @@ const watches = [
     reference: "WSSA0039",
     currentPrice: 5950,
     estimatedRetail: 8000,
-    budgetFit: 6500,
     sourceScore: 90,
     availability: "En stock",
     history: [7210, 7030, 6880, 6480, 6190, 5950],
@@ -50,9 +48,28 @@ const watches = [
 ];
 
 const monthLabels = ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin"];
+const availabilityScoreMap = {
+  "En stock": 100,
+  "Sous 24h": 80,
+  "Neuf seulement": 65,
+  Complet: 30,
+};
+
 const state = {
   watchlist: new Set(),
   alerts: [],
+  notificationPrefs: {
+    email: true,
+    telegram: false,
+    push: true,
+    frequency: "Temps réel",
+  },
+  scoreWeights: {
+    price: 40,
+    trend: 25,
+    source: 20,
+    availability: 15,
+  },
 };
 
 const els = {
@@ -78,10 +95,76 @@ const els = {
   closeWatchlistBtn: document.getElementById("closeWatchlistBtn"),
   watchlistEntries: document.getElementById("watchlistEntries"),
   watchlistCount: document.getElementById("watchlistCount"),
+  weightPrice: document.getElementById("weightPrice"),
+  weightTrend: document.getElementById("weightTrend"),
+  weightSource: document.getElementById("weightSource"),
+  weightAvailability: document.getElementById("weightAvailability"),
+  scoreConfigSummary: document.getElementById("scoreConfigSummary"),
 };
 
 function euro(value) {
   return new Intl.NumberFormat("fr-FR", { style: "currency", currency: "EUR", maximumFractionDigits: 0 }).format(value);
+}
+
+function clampPercent(value) {
+  return Math.max(0, Math.min(100, value));
+}
+
+function getTrendPercent(watch) {
+  const latest = watch.history.at(-1);
+  const previous = watch.history.at(-2) || latest;
+  return ((latest - previous) / previous) * 100;
+}
+
+function getBuyScore(watch) {
+  const priceDelta = ((watch.estimatedRetail - watch.currentPrice) / watch.estimatedRetail) * 100;
+  const priceComponent = clampPercent(50 + priceDelta * 2);
+  const trendComponent = clampPercent(50 - getTrendPercent(watch) * 4);
+  const sourceComponent = clampPercent(watch.sourceScore);
+  const availabilityComponent = availabilityScoreMap[watch.availability] ?? 50;
+
+  const weights = state.scoreWeights;
+  const totalWeight = Object.values(weights).reduce((sum, value) => sum + value, 0) || 1;
+  const weightedScore =
+    (priceComponent * weights.price +
+      trendComponent * weights.trend +
+      sourceComponent * weights.source +
+      availabilityComponent * weights.availability) /
+    totalWeight;
+
+  return {
+    value: Math.round(weightedScore),
+    rationale: [
+      `Prix vs retail: ${Math.round(priceComponent)}/100`,
+      `Tendance récente: ${Math.round(trendComponent)}/100`,
+      `Confiance source: ${Math.round(sourceComponent)}/100`,
+      `Disponibilité: ${Math.round(availabilityComponent)}/100`,
+    ],
+  };
+}
+
+function saveState() {
+  const payload = {
+    watchlist: [...state.watchlist],
+    alerts: state.alerts,
+    notificationPrefs: state.notificationPrefs,
+    scoreWeights: state.scoreWeights,
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed.watchlist)) state.watchlist = new Set(parsed.watchlist);
+    if (Array.isArray(parsed.alerts)) state.alerts = parsed.alerts;
+    if (parsed.notificationPrefs) state.notificationPrefs = { ...state.notificationPrefs, ...parsed.notificationPrefs };
+    if (parsed.scoreWeights) state.scoreWeights = { ...state.scoreWeights, ...parsed.scoreWeights };
+  } catch {
+    // ignore parse/storage issues
+  }
 }
 
 function renderFilterOptions() {
@@ -96,13 +179,14 @@ function renderFilterOptions() {
 function filteredWatches() {
   const brand = els.brandFilter.value;
   const referenceText = els.referenceFilter.value.trim().toLowerCase();
-  const budget = Number(els.budgetFilter.value || Infinity);
+  const budgetRaw = els.budgetFilter.value;
+  const budget = budgetRaw === "" ? Number.POSITIVE_INFINITY : Number(budgetRaw);
 
   return watches
-    .filter((w) => (!brand || w.brand === brand))
-    .filter((w) => (!referenceText || w.reference.toLowerCase().includes(referenceText)))
-    .filter((w) => w.currentPrice <= budget)
-    .sort((a, b) => (b.estimatedRetail - b.currentPrice) - (a.estimatedRetail - a.currentPrice));
+    .filter((watch) => (!brand || watch.brand === brand))
+    .filter((watch) => (!referenceText || watch.reference.toLowerCase().includes(referenceText)))
+    .filter((watch) => watch.currentPrice <= budget)
+    .sort((a, b) => getBuyScore(b).value - getBuyScore(a).value);
 }
 
 function renderOpportunities() {
@@ -110,19 +194,24 @@ function renderOpportunities() {
   els.opportunityList.innerHTML = "";
 
   if (!list.length) {
-    els.opportunityList.innerHTML = `<p class="muted">Aucune opportunité pour ces filtres.</p>`;
+    els.opportunityList.innerHTML = '<p class="muted">Aucune opportunité pour ces filtres.</p>';
     return;
   }
 
   list.forEach((watch) => {
     const savings = watch.estimatedRetail - watch.currentPrice;
+    const buyScore = getBuyScore(watch);
+
     const container = document.createElement("div");
     container.className = "opportunity";
     container.innerHTML = `
-      <strong>${watch.brand} ${watch.model}</strong> <span class="badge ${savings > 0 ? "success" : "warning"}">${savings > 0 ? "Sous retail" : "Au-dessus retail"}</span>
+      <strong>${watch.brand} ${watch.model}</strong>
+      <span class="badge ${savings > 0 ? "success" : "warning"}">${savings > 0 ? "Sous retail" : "Au-dessus retail"}</span>
+      <span class="badge score">buy_score ${buyScore.value}/100</span>
       <div>Réf: ${watch.reference}</div>
       <div>Prix marché: <strong>${euro(watch.currentPrice)}</strong> • Retail estimé: ${euro(watch.estimatedRetail)}</div>
       <div>Disponibilité: ${watch.availability}</div>
+      <div class="muted">${buyScore.rationale.join(" • ")}</div>
       <button data-watch="${watch.id}">${state.watchlist.has(watch.id) ? "Retirer des favoris" : "Ajouter aux favoris"}</button>
     `;
 
@@ -149,11 +238,14 @@ function renderWatchDetail() {
   const watch = watches.find((w) => w.id === els.watchSelector.value) ?? watches[0];
   if (!watch) return;
 
-  const lastChange = (((watch.history.at(-1) - watch.history.at(-2)) / watch.history.at(-2)) * 100).toFixed(1);
+  const trend = getTrendPercent(watch).toFixed(1);
+  const buyScore = getBuyScore(watch);
   els.watchDetails.innerHTML = `
     <strong>${watch.brand} ${watch.model} (${watch.reference})</strong>
-    <span>Prix actuel: ${euro(watch.currentPrice)} | Variation mensuelle: ${lastChange}%</span>
+    <span>Prix actuel: ${euro(watch.currentPrice)} | Variation mensuelle: ${trend}%</span>
     <span>Confiance source: ${watch.sourceScore}/100 | Disponibilité: ${watch.availability}</span>
+    <span><strong>buy_score:</strong> ${buyScore.value}/100</span>
+    <span class="muted">Explication: ${buyScore.rationale.join(" • ")}</span>
   `;
 
   drawChart(watch.history);
@@ -214,6 +306,7 @@ function toggleWatchlist(id) {
   else state.watchlist.add(id);
 
   els.watchlistCount.textContent = state.watchlist.size;
+  saveState();
   renderOpportunities();
   renderWatchlist();
 }
@@ -223,7 +316,8 @@ function renderWatchlist() {
   els.watchlistEntries.innerHTML = entries.length
     ? entries
         .map(
-          (watch) => `<div class="watchlist-item"><strong>${watch.brand} ${watch.reference}</strong><div>${euro(watch.currentPrice)} • ${watch.availability}</div></div>`,
+          (watch) =>
+            `<div class="watchlist-item"><strong>${watch.brand} ${watch.reference}</strong><div>${euro(watch.currentPrice)} • ${watch.availability}</div></div>`,
         )
         .join("")
     : '<p class="muted">Aucun favori pour le moment.</p>';
@@ -234,11 +328,12 @@ function wireAlertForm() {
     event.preventDefault();
     const data = new FormData(els.alertForm);
     state.alerts.unshift({
-      reference: data.get("reference"),
+      reference: String(data.get("reference") ?? "").trim().toUpperCase(),
       targetPrice: Number(data.get("targetPrice")),
       variation: Number(data.get("variation")),
-      availability: data.get("availability"),
+      availability: String(data.get("availability") ?? ""),
     });
+    saveState();
     els.alertForm.reset();
     renderAlerts();
   });
@@ -248,10 +343,18 @@ function renderAlerts() {
   els.alertsList.innerHTML = state.alerts.length
     ? state.alerts
         .map(
-          (alert) => `<div class="alert-item">${alert.reference} • cible ${euro(alert.targetPrice)} • variation ${alert.variation}% • ${alert.availability}</div>`,
+          (alert) =>
+            `<div class="alert-item">${alert.reference} • cible ${euro(alert.targetPrice)} • variation ${alert.variation}% • ${alert.availability}</div>`,
         )
         .join("")
     : '<p class="muted">Créez votre première alerte (prix cible, variation %, disponibilité).</p>';
+}
+
+function applyNotificationPrefsToForm() {
+  els.notificationForm.elements.email.checked = state.notificationPrefs.email;
+  els.notificationForm.elements.telegram.checked = state.notificationPrefs.telegram;
+  els.notificationForm.elements.push.checked = state.notificationPrefs.push;
+  els.notificationForm.elements.frequency.value = state.notificationPrefs.frequency;
 }
 
 function wireNotificationForm() {
@@ -259,7 +362,16 @@ function wireNotificationForm() {
     event.preventDefault();
     const data = new FormData(els.notificationForm);
     const channels = ["email", "telegram", "push"].filter((channel) => data.get(channel));
-    els.notificationStatus.textContent = `Notifications enregistrées: ${channels.join(", ")} (${data.get("frequency")}).`;
+
+    state.notificationPrefs = {
+      email: Boolean(data.get("email")),
+      telegram: Boolean(data.get("telegram")),
+      push: Boolean(data.get("push")),
+      frequency: String(data.get("frequency")),
+    };
+
+    saveState();
+    els.notificationStatus.textContent = `Notifications enregistrées: ${channels.join(", ") || "aucun canal"} (${data.get("frequency")}).`;
   });
 }
 
@@ -279,6 +391,7 @@ function renderComparison() {
     ["Retail estimé", ...selected.map((w) => euro(w.estimatedRetail))],
     ["Disponibilité", ...selected.map((w) => w.availability)],
     ["Confiance source", ...selected.map((w) => `${w.sourceScore}/100`)],
+    ["buy_score", ...selected.map((w) => `${getBuyScore(w).value}/100`)],
   ];
 
   const header = `<tr><th>Critère</th>${selected.map((w) => `<th>${w.model}</th>`).join("")}</tr>`;
@@ -286,14 +399,51 @@ function renderComparison() {
   els.comparisonTable.innerHTML = `<table>${header}${body}</table>`;
 }
 
+function syncScoreSliders() {
+  els.weightPrice.value = state.scoreWeights.price;
+  els.weightTrend.value = state.scoreWeights.trend;
+  els.weightSource.value = state.scoreWeights.source;
+  els.weightAvailability.value = state.scoreWeights.availability;
+}
+
+function renderScoreConfigSummary() {
+  const w = state.scoreWeights;
+  const total = w.price + w.trend + w.source + w.availability || 1;
+  els.scoreConfigSummary.textContent = `Poids normalisés — Prix ${Math.round((w.price / total) * 100)}%, Tendance ${Math.round((w.trend / total) * 100)}%, Source ${Math.round((w.source / total) * 100)}%, Disponibilité ${Math.round((w.availability / total) * 100)}%.`;
+}
+
+function wireScoreConfig() {
+  [
+    ["price", els.weightPrice],
+    ["trend", els.weightTrend],
+    ["source", els.weightSource],
+    ["availability", els.weightAvailability],
+  ].forEach(([key, input]) => {
+    input.addEventListener("input", () => {
+      state.scoreWeights[key] = Number(input.value);
+      saveState();
+      renderScoreConfigSummary();
+      renderOpportunities();
+      renderWatchDetail();
+      renderComparison();
+    });
+  });
+}
+
 function boot() {
+  loadState();
   renderFilterOptions();
   renderWatchSelectors();
+  syncScoreSliders();
+  applyNotificationPrefsToForm();
+  renderScoreConfigSummary();
   renderOpportunities();
   renderWatchDetail();
   renderConfidenceBoard();
   renderAlerts();
   renderComparison();
+  renderWatchlist();
+  els.watchlistCount.textContent = state.watchlist.size;
 
   [els.brandFilter, els.referenceFilter, els.budgetFilter].forEach((input) => input.addEventListener("input", renderOpportunities));
   els.watchSelector.addEventListener("change", renderWatchDetail);
@@ -301,6 +451,7 @@ function boot() {
 
   wireAlertForm();
   wireNotificationForm();
+  wireScoreConfig();
 
   els.viewWatchlistBtn.addEventListener("click", () => {
     renderWatchlist();
